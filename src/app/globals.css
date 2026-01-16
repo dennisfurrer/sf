@@ -1,0 +1,507 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ========================================
+   THEME SYSTEM - CSS Custom Properties
+   ======================================== */
+
+:root {
+  /* Shared Base Colors */
+  --color-black: #050505;
+  --color-charcoal: #0a0a0a;
+  --color-smoke: #141414;
+  --color-surface-1: #1a1a1a;
+  --color-surface-2: #222222;
+  --color-surface-3: #2a2a2a;
+
+  /* Text Colors */
+  --color-text-primary: #f5f5f7;
+  --color-text-secondary: #a1a1a6;
+  --color-text-muted: #636366;
+
+  /* Glass/Transparency */
+  --glass-bg: rgba(255, 255, 255, 0.04);
+  --glass-bg-strong: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-border-strong: rgba(255, 255, 255, 0.18);
+}
+
+/* SUNSET THEME - Orange, Pink, Purple (Default) */
+[data-theme="sunset"],
+:root {
+  /* Primary Accent - Vibrant Orange */
+  --color-accent-1: #ff6b35;
+  --color-accent-1-light: #ff8f5a;
+  --color-accent-1-dark: #e55a2b;
+
+  /* Secondary Accent - Hot Pink */
+  --color-accent-2: #ff2d92;
+  --color-accent-2-light: #ff5aaa;
+  --color-accent-2-dark: #d91f78;
+
+  /* Tertiary Accent - Electric Purple */
+  --color-accent-3: #9d4edd;
+  --color-accent-3-light: #b76be8;
+  --color-accent-3-dark: #7b2cbf;
+
+  /* Gradients */
+  --gradient-hero: linear-gradient(
+    135deg,
+    #ff6b35 0%,
+    #ff2d92 50%,
+    #9d4edd 100%
+  );
+  --gradient-hero-subtle: linear-gradient(
+    135deg,
+    rgba(255, 107, 53, 0.4) 0%,
+    rgba(255, 45, 146, 0.3) 50%,
+    rgba(157, 78, 221, 0.4) 100%
+  );
+  --gradient-card: linear-gradient(
+    180deg,
+    rgba(255, 107, 53, 0.15) 0%,
+    rgba(255, 45, 146, 0.1) 100%
+  );
+  --gradient-glow: radial-gradient(
+    circle,
+    rgba(255, 45, 146, 0.5) 0%,
+    transparent 70%
+  );
+
+  /* Glow Colors */
+  --glow-primary: rgba(255, 107, 53, 0.5);
+  --glow-secondary: rgba(255, 45, 146, 0.5);
+  --glow-tertiary: rgba(157, 78, 221, 0.5);
+
+  /* Button */
+  --button-primary: linear-gradient(135deg, #ff6b35 0%, #ff2d92 100%);
+  --button-hover: linear-gradient(135deg, #ff8f5a 0%, #ff5aaa 100%);
+}
+
+/* EARTHY THEME - Forest Green, Terracotta, Cream */
+[data-theme="earthy"] {
+  /* Primary Accent - Forest Green */
+  --color-accent-1: #2d6a4f;
+  --color-accent-1-light: #40916c;
+  --color-accent-1-dark: #1b4332;
+
+  /* Secondary Accent - Terracotta */
+  --color-accent-2: #c45c3a;
+  --color-accent-2-light: #d97b5a;
+  --color-accent-2-dark: #a64b2e;
+
+  /* Tertiary Accent - Warm Cream */
+  --color-accent-3: #dda15e;
+  --color-accent-3-light: #e9bd82;
+  --color-accent-3-dark: #bc6c25;
+
+  /* Gradients */
+  --gradient-hero: linear-gradient(
+    135deg,
+    #2d6a4f 0%,
+    #c45c3a 50%,
+    #dda15e 100%
+  );
+  --gradient-hero-subtle: linear-gradient(
+    135deg,
+    rgba(45, 106, 79, 0.4) 0%,
+    rgba(196, 92, 58, 0.3) 50%,
+    rgba(221, 161, 94, 0.4) 100%
+  );
+  --gradient-card: linear-gradient(
+    180deg,
+    rgba(45, 106, 79, 0.15) 0%,
+    rgba(196, 92, 58, 0.1) 100%
+  );
+  --gradient-glow: radial-gradient(
+    circle,
+    rgba(196, 92, 58, 0.5) 0%,
+    transparent 70%
+  );
+
+  /* Glow Colors */
+  --glow-primary: rgba(45, 106, 79, 0.5);
+  --glow-secondary: rgba(196, 92, 58, 0.5);
+  --glow-tertiary: rgba(221, 161, 94, 0.5);
+
+  /* Button */
+  --button-primary: linear-gradient(135deg, #2d6a4f 0%, #40916c 100%);
+  --button-hover: linear-gradient(135deg, #40916c 0%, #52b788 100%);
+}
+
+/* ========================================
+   BASE STYLES
+   ======================================== */
+
+@layer base {
+  html {
+    @apply bg-surface-black text-text-primary scroll-smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply min-h-screen overflow-x-hidden antialiased font-body;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    background: var(--color-black);
+  }
+
+  /* Selection style */
+  ::selection {
+    background: var(--color-accent-2);
+    color: white;
+  }
+}
+
+/* ========================================
+   COMPONENT STYLES
+   ======================================== */
+
+@layer components {
+  /* Modern Glass Morphism */
+  .glass {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    @apply backdrop-blur-lg;
+  }
+
+  .glass-strong {
+    background: var(--glass-bg-strong);
+    border: 1px solid var(--glass-border-strong);
+    @apply backdrop-blur-xl;
+  }
+
+  .glass-surface {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    @apply backdrop-blur-lg;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+      0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+
+  .glass-surface-elevated {
+    background: var(--glass-bg-strong);
+    border: 1px solid var(--glass-border-strong);
+    @apply backdrop-blur-xl;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1) inset,
+      0 16px 48px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Primary Button - Gradient with glow */
+  .btn-primary {
+    @apply relative overflow-hidden text-white font-semibold rounded-2xl px-6 py-3;
+    @apply transition-all duration-300;
+    @apply hover:scale-[1.03] active:scale-[0.98];
+    background: var(--button-primary);
+    box-shadow: 0 0 30px var(--glow-primary), 0 4px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  .btn-primary:hover {
+    background: var(--button-hover);
+    box-shadow: 0 0 50px var(--glow-primary), 0 8px 25px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Secondary Button - Glass */
+  .btn-secondary {
+    @apply glass-surface rounded-2xl font-medium text-text-primary px-6 py-3;
+    @apply transition-all duration-300;
+    @apply hover:scale-[1.02] active:scale-[0.98];
+  }
+
+  .btn-secondary:hover {
+    background: var(--glass-bg-strong);
+    border-color: var(--glass-border-strong);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+      0 12px 40px rgba(0, 0, 0, 0.4), 0 0 30px var(--glow-primary);
+  }
+
+  /* Icon Button */
+  .icon-btn {
+    @apply w-11 h-11 rounded-full flex items-center justify-center;
+    @apply text-text-secondary transition-all duration-200;
+    @apply active:scale-95;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    @apply backdrop-blur-xl;
+  }
+
+  .icon-btn:hover {
+    @apply text-text-primary;
+    background: var(--glass-bg-strong);
+    border-color: var(--glass-border-strong);
+    box-shadow: 0 0 20px var(--glow-primary);
+  }
+
+  /* Modern Card Styles */
+  .card-modern {
+    @apply relative rounded-3xl overflow-hidden;
+    background: linear-gradient(
+      180deg,
+      var(--glass-bg-strong) 0%,
+      var(--glass-bg) 100%
+    );
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4),
+      0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card-modern:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px var(--glow-primary),
+      0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+  }
+
+  .card-featured {
+    @apply card-modern;
+    background: linear-gradient(135deg, var(--glass-bg-strong) 0%, transparent 50%),
+      var(--gradient-card);
+  }
+
+  .card-floating {
+    @apply card-modern;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6), 0 0 60px var(--glow-secondary),
+      0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  }
+
+  /* Legacy card */
+  .card-velvet {
+    @apply rounded-2xl overflow-hidden bg-surface-1 border border-white/[0.08] shadow-2xl;
+  }
+
+  /* Badge Styles */
+  .badge {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium;
+    background: rgba(0, 0, 0, 0.5);
+    @apply backdrop-blur-sm;
+  }
+
+  .badge-verified {
+    @apply badge border;
+    background: linear-gradient(
+      135deg,
+      rgba(251, 191, 36, 0.2) 0%,
+      rgba(234, 179, 8, 0.2) 100%
+    );
+    border-color: rgba(251, 191, 36, 0.4);
+    color: #fcd34d;
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
+  }
+
+  .badge-online {
+    @apply badge border;
+    background: rgba(52, 211, 153, 0.2);
+    border-color: rgba(52, 211, 153, 0.4);
+    color: #6ee7b7;
+  }
+
+  .badge-online::before {
+    content: "";
+    @apply w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse;
+  }
+
+  .badge-accent {
+    @apply badge border;
+    background: rgba(var(--color-accent-1), 0.2);
+    border-color: var(--color-accent-1);
+    color: var(--color-accent-1-light);
+  }
+
+  .badge-live {
+    @apply badge border;
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.4);
+    color: #fca5a5;
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+  }
+
+  /* Tag Styles */
+  .tag {
+    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    @apply text-text-secondary;
+  }
+
+  .tag-primary {
+    @apply tag;
+    background: rgba(52, 211, 153, 0.15);
+    border-color: rgba(52, 211, 153, 0.3);
+    color: #6ee7b7;
+  }
+
+  /* Filter Pills - Spotify style */
+  .filter-pill {
+    @apply px-5 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap;
+    @apply transition-all duration-300;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .filter-pill:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.9);
+    border-color: rgba(255, 255, 255, 0.18);
+  }
+
+  .filter-pill-active {
+    background: #16a34a;
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 4px 20px rgba(22, 163, 74, 0.4);
+  }
+
+  .filter-pill-active:hover {
+    background: #15803d;
+  }
+
+  /* Input Styles */
+  .input-field {
+    @apply w-full px-4 py-3 rounded-xl text-text-primary;
+    @apply placeholder:text-text-muted;
+    @apply focus:outline-none transition-all duration-200;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+  }
+
+  .input-field:focus {
+    border-color: var(--color-accent-1);
+    box-shadow: 0 0 0 3px rgba(var(--color-accent-1), 0.2),
+      0 0 20px var(--glow-primary);
+  }
+
+  /* Story Ring - Theme-aware gradient border */
+  .story-ring {
+    @apply rounded-full p-[3px];
+    background: var(--gradient-hero);
+    box-shadow: 0 0 20px var(--glow-primary);
+  }
+
+  .story-ring-inner {
+    @apply rounded-full p-[2px];
+    background: var(--color-black);
+  }
+
+  /* Quick Reply Chips */
+  .quick-chip {
+    @apply px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap;
+    @apply transition-all duration-200;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .quick-chip:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: var(--color-accent-1);
+    color: var(--color-accent-1);
+  }
+
+  .quick-chip:active {
+    transform: scale(0.95);
+  }
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+@layer utilities {
+  /* Safe area padding */
+  .safe-bottom {
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+
+  .safe-top {
+    padding-top: max(16px, env(safe-area-inset-top));
+  }
+
+  .pt-safe {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  /* Scrollbar hiding */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Gradient text */
+  .text-gradient {
+    background: var(--gradient-hero);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Glow effects */
+  .hover-glow {
+    @apply transition-shadow duration-300;
+  }
+
+  .hover-glow:hover {
+    box-shadow: 0 0 40px var(--glow-primary);
+  }
+
+  /* Shimmer effect */
+  .shimmer-bg {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.1) 50%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  /* Interactive element base */
+  .interactive {
+    @apply transition-all duration-200;
+  }
+
+  .interactive:hover {
+    @apply scale-[1.02];
+  }
+
+  .interactive:active {
+    @apply scale-[0.98];
+  }
+
+  /* Stagger animation delays */
+  .stagger-1 {
+    animation-delay: 0.1s;
+  }
+  .stagger-2 {
+    animation-delay: 0.2s;
+  }
+  .stagger-3 {
+    animation-delay: 0.3s;
+  }
+  .stagger-4 {
+    animation-delay: 0.4s;
+  }
+  .stagger-5 {
+    animation-delay: 0.5s;
+  }
+}
+
+/* ========================================
+   REDUCED MOTION
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

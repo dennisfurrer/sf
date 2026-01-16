@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>StonelyFans - Connect & Vibe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <style>
+        :root {
+            --lounge-black: #080808;
+            --lounge-charcoal: #111111;
+            --lounge-smoke: #1a1a1a;
+            --lounge-ember: #1f1410;
+            --accent-rose: #8b4d62;
+            --accent-rose-dark: #5c3344;
+            --accent-blush: #b76e79;
+            --accent-gold: #c9a962;
+            --accent-gold-light: #e8d5a3;
+            --accent-green: #4a7c59;
+            --accent-green-light: #6b9b7a;
+            --text-primary: #f5f0eb;
+            --text-secondary: #9a9590;
+            --text-muted: #5a5550;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-strong: rgba(255, 255, 255, 0.06);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glow-rose: rgba(139, 77, 98, 0.5);
+            --glow-gold: rgba(201, 169, 98, 0.4);
+            --glow-green: rgba(74, 124, 89, 0.4);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        html, body { height: 100%; overflow: hidden; }
+        body { font-family: 'Outfit', sans-serif; background: var(--lounge-black); color: var(--text-primary); min-height: 100vh; }
+        
+        .lounge-atmosphere { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+        .ambient-light { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.6; }
+        .ambient-light.rose { width: 300px; height: 300px; background: radial-gradient(circle, rgba(139, 77, 98, 0.15) 0%, transparent 70%); bottom: -100px; left: -50px; }
+        .ambient-light.gold { width: 250px; height: 250px; background: radial-gradient(circle, rgba(201, 169, 98, 0.1) 0%, transparent 70%); top: -50px; right: -50px; }
+        .ambient-light.green { width: 200px; height: 200px; background: radial-gradient(circle, rgba(74, 124, 89, 0.08) 0%, transparent 70%); top: 40%; left: 50%; transform: translateX(-50%); }
+        .smoke-container, .ember-container, .leaf-container { position: absolute; inset: 0; overflow: hidden; }
+        .smoke-particle { position: absolute; background: radial-gradient(ellipse, rgba(255,255,255,0.04) 0%, transparent 70%); border-radius: 50%; }
+        .ember { position: absolute; width: 3px; height: 3px; background: var(--accent-gold); border-radius: 50%; box-shadow: 0 0 6px var(--accent-gold), 0 0 12px rgba(201, 169, 98, 0.5); opacity: 0; }
+        .leaf { position: absolute; font-size: 12px; opacity: 0; filter: drop-shadow(0 0 4px rgba(74, 124, 89, 0.5)); }
+        .noise-overlay { position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"); opacity: 0.025; pointer-events: none; z-index: 1; }
+        .vignette { position: fixed; inset: 0; background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.4) 100%); pointer-events: none; z-index: 1; }
+        
+        .app-container { position: relative; z-index: 2; height: 100vh; height: 100dvh; display: flex; flex-direction: column; max-width: 480px; margin: 0 auto; overflow: hidden; }
+        
+        .header { padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 100; background: linear-gradient(180deg, rgba(8,8,8,0.9) 0%, transparent 100%); }
+        .logo-container { display: flex; align-items: center; gap: 10px; }
+        .logo { width: 34px; height: 34px; border-radius: 8px; object-fit: contain; }
+        .brand-name { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 500; color: var(--text-primary); letter-spacing: 0.5px; }
+        .brand-name span { color: var(--accent-gold); }
+        .header-actions { display: flex; gap: 8px; }
+        .icon-btn { width: 38px; height: 38px; border-radius: 10px; background: var(--glass); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); cursor: pointer; transition: all 0.2s ease; position: relative; }
+        .icon-btn:hover { background: var(--glass-strong); color: var(--text-primary); transform: translateY(-1px); }
+        .icon-btn svg { width: 18px; height: 18px; }
+        .notification-badge { position: absolute; top: 7px; right: 7px; width: 7px; height: 7px; background: var(--accent-rose); border-radius: 50%; box-shadow: 0 0 8px var(--glow-rose); }
+        
+        .page-container { flex: 1; overflow: hidden; position: relative; }
+        .page { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s ease; overflow-y: auto; overflow-x: hidden; }
+        .page.active { opacity: 1; visibility: visible; }
+        .page::-webkit-scrollbar { width: 3px; }
+        .page::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+        
+        .discover-page { padding: 0 16px 100px; }
+        .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; padding-top: 4px; }
+        .section-title { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 500; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
+        .section-action { font-size: 0.8rem; color: var(--accent-gold); cursor: pointer; }
+        
+        .stories-row { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 24px; scrollbar-width: none; }
+        .stories-row::-webkit-scrollbar { display: none; }
+        .story-item { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; transition: transform 0.2s ease; }
+        .story-item:hover { transform: scale(1.05); }
+        .story-ring { width: 64px; height: 64px; border-radius: 50%; padding: 2px; background: linear-gradient(135deg, var(--accent-green), var(--accent-gold), var(--accent-rose)); position: relative; }
+        .story-ring::before { content: ''; position: absolute; inset: 2px; border-radius: 50%; background: var(--lounge-black); }
+        .story-ring.add { background: var(--glass); border: 2px dashed var(--glass-border); padding: 0; display: flex; align-items: center; justify-content: center; }
+        .story-ring.add::before { display: none; }
+        .story-ring.add svg { width: 22px; height: 22px; color: var(--text-muted); }
+        .story-avatar { position: relative; z-index: 1; width: calc(100% - 4px); height: calc(100% - 4px); margin: 2px; border-radius: 50%; object-fit: cover; }
+        .story-name { font-size: 0.7rem; color: var(--text-secondary); max-width: 64px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        
+        .vibe-banner { background: linear-gradient(135deg, var(--lounge-ember), rgba(74, 124, 89, 0.15)); border: 1px solid rgba(74, 124, 89, 0.2); border-radius: 16px; padding: 16px; margin-bottom: 24px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; }
+        .vibe-banner:hover { border-color: rgba(74, 124, 89, 0.4); transform: translateY(-2px); }
+        .vibe-icon { width: 48px; height: 48px; background: linear-gradient(135deg, var(--accent-green), var(--accent-green-light)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 4px 20px var(--glow-green); }
+        .vibe-content { flex: 1; }
+        .vibe-title { font-weight: 500; color: var(--text-primary); margin-bottom: 2px; }
+        .vibe-subtitle { font-size: 0.8rem; color: var(--text-muted); }
+        .vibe-arrow { color: var(--accent-green-light); }
+        
+        .featured-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 24px; }
+        .featured-card { position: relative; aspect-ratio: 0.75; border-radius: 14px; overflow: hidden; cursor: pointer; transition: all 0.3s ease; }
+        .featured-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .featured-card.hero { grid-column: span 2; aspect-ratio: 1.6; }
+        .featured-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .featured-card:hover img { transform: scale(1.05); }
+        .featured-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(8, 8, 8, 0.95) 0%, rgba(8, 8, 8, 0.5) 40%, transparent 70%); }
+        .featured-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 14px; z-index: 2; }
+        .featured-badges { display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }
+        .featured-badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(10px); border-radius: 6px; font-size: 0.65rem; font-weight: 500; }
+        .featured-badge.gold { color: var(--accent-gold-light); border: 1px solid rgba(201, 169, 98, 0.3); }
+        .featured-badge.green { color: var(--accent-green-light); border: 1px solid rgba(74, 124, 89, 0.3); }
+        .featured-badge.online { color: #6fcf97; }
+        .featured-badge.online::before { content: ''; width: 5px; height: 5px; background: #6fcf97; border-radius: 50%; animation: pulse-dot 2s infinite; }
+        @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        .featured-name { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--text-primary); margin-bottom: 2px; }
+        .featured-card.hero .featured-name { font-size: 1.5rem; }
+        .featured-info { font-size: 0.75rem; color: var(--text-muted); display: flex; align-items: center; gap: 4px; }
+        .featured-info svg { width: 12px; height: 12px; }
+        
+        .strain-section { margin-bottom: 24px; }
+        .strain-pills { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+        .strain-pills::-webkit-scrollbar { display: none; }
+        .strain-pill { flex-shrink: 0; padding: 10px 16px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px; font-size: 0.8rem; color: var(--text-secondary); cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 6px; }
+        .strain-pill:hover { background: var(--glass-strong); }
+        .strain-pill.active { background: linear-gradient(135deg, rgba(74, 124, 89, 0.2), rgba(74, 124, 89, 0.1)); border-color: rgba(74, 124, 89, 0.4); color: var(--accent-green-light); }
+        
+        .nearby-list { display: flex; flex-direction: column; gap: 10px; }
+        .nearby-card { display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 14px; cursor: pointer; transition: all 0.25s ease; }
+        .nearby-card:hover { background: var(--glass-strong); transform: translateX(4px); }
+        .nearby-avatar-wrapper { position: relative; flex-shrink: 0; }
+        .nearby-avatar { width: 52px; height: 52px; border-radius: 12px; object-fit: cover; }
+        .nearby-online { position: absolute; bottom: -2px; right: -2px; width: 14px; height: 14px; background: #6fcf97; border-radius: 50%; border: 2px solid var(--lounge-black); }
+        .nearby-info { flex: 1; min-width: 0; }
+        .nearby-header { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
+        .nearby-name { font-weight: 500; color: var(--text-primary); font-size: 0.95rem; }
+        .nearby-age { color: var(--text-muted); font-size: 0.85rem; }
+        .nearby-verified { color: var(--accent-gold); }
+        .nearby-verified svg { width: 14px; height: 14px; }
+        .nearby-meta { display: flex; align-items: center; gap: 10px; font-size: 0.75rem; color: var(--text-muted); }
+        .nearby-meta span { display: flex; align-items: center; gap: 3px; }
+        .nearby-meta svg { width: 12px; height: 12px; }
+        .nearby-tag { padding: 5px 10px; background: rgba(74, 124, 89, 0.15); border: 1px solid rgba(74, 124, 89, 0.2); border-radius: 8px; font-size: 0.7rem; color: var(--accent-green-light); white-space: nowrap; }
+        
+        .matches-page { display: flex; flex-direction: column; height: 100%; padding: 0 16px; }
+        .card-stack { flex: 1; position: relative; display: flex; align-items: center; justify-content: center; }
+        .profile-card { position: absolute; width: 100%; max-width: 320px; aspect-ratio: 0.68; border-radius: 20px; overflow: hidden; background: var(--lounge-charcoal); box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6); cursor: grab; user-select: none; }
+        .profile-card:active { cursor: grabbing; }
+        .profile-card.card-behind-1 { transform: scale(0.92) translateY(18px); filter: brightness(0.5); z-index: 1; }
+        .profile-card.card-behind-2 { transform: scale(0.84) translateY(36px); filter: brightness(0.3); z-index: 0; }
+        .profile-card.card-front { z-index: 10; }
+        .card-image-wrapper { position: relative; width: 100%; height: 100%; }
+        .card-image { width: 100%; height: 100%; object-fit: cover; }
+        .card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(8, 8, 8, 0.98) 0%, rgba(8, 8, 8, 0.6) 35%, transparent 65%); }
+        .card-top-badges { position: absolute; top: 14px; left: 14px; right: 14px; display: flex; justify-content: space-between; z-index: 5; }
+        .card-badge { padding: 5px 10px; background: rgba(8, 8, 8, 0.6); backdrop-filter: blur(10px); border-radius: 8px; font-size: 0.7rem; font-weight: 500; display: flex; align-items: center; gap: 5px; }
+        .card-badge.verified { color: var(--accent-gold); }
+        .card-badge.online { color: #6fcf97; }
+        .card-badge.online::before { content: ''; width: 6px; height: 6px; background: #6fcf97; border-radius: 50%; }
+        .card-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px 16px; z-index: 5; }
+        .card-header { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; }
+        .card-name { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 500; color: var(--text-primary); }
+        .card-age { font-size: 1.2rem; color: var(--text-secondary); font-weight: 300; }
+        .card-location { display: flex; align-items: center; gap: 5px; color: var(--text-muted); font-size: 0.8rem; margin-bottom: 12px; }
+        .card-location svg { width: 12px; height: 12px; }
+        .card-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+        .card-tag { padding: 5px 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; font-size: 0.75rem; color: var(--text-secondary); }
+        .card-tag.primary { background: rgba(74, 124, 89, 0.2); border-color: rgba(74, 124, 89, 0.3); color: var(--accent-green-light); }
+        .swipe-indicator { position: absolute; top: 45%; transform: translateY(-50%); padding: 10px 18px; border-radius: 8px; font-size: 1rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; opacity: 0; pointer-events: none; z-index: 20; }
+        .swipe-like { right: 20px; background: rgba(111, 207, 151, 0.15); border: 2px solid #6fcf97; color: #6fcf97; transform: translateY(-50%) rotate(12deg); }
+        .swipe-nope { left: 20px; background: rgba(235, 87, 87, 0.15); border: 2px solid #eb5757; color: #eb5757; transform: translateY(-50%) rotate(-12deg); }
+        
+        .action-bar { padding: 16px 10px 20px; display: flex; justify-content: center; align-items: center; gap: 14px; }
+        .action-btn { border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; border: none; background: var(--lounge-charcoal); }
+        .action-btn:hover { transform: scale(1.1); }
+        .action-btn:active { transform: scale(0.95); }
+        .action-btn.small { width: 42px; height: 42px; border: 1px solid var(--glass-border); }
+        .action-btn.small svg { width: 18px; height: 18px; color: var(--text-secondary); }
+        .action-btn.nope { width: 52px; height: 52px; background: linear-gradient(135deg, #2a1515, #1f1010); border: 1px solid rgba(235, 87, 87, 0.3); }
+        .action-btn.nope svg { width: 22px; height: 22px; color: #eb5757; }
+        .action-btn.like { width: 62px; height: 62px; background: linear-gradient(135deg, var(--accent-rose), var(--accent-rose-dark)); box-shadow: 0 8px 30px var(--glow-rose); }
+        .action-btn.like svg { width: 26px; height: 26px; color: #fff; }
+        .action-btn.superlike { width: 52px; height: 52px; background: linear-gradient(135deg, #2a2515, #1f1a10); border: 1px solid rgba(201, 169, 98, 0.3); }
+        .action-btn.superlike svg { width: 22px; height: 22px; color: var(--accent-gold); }
+        
+        .profile-page { padding: 0 0 100px; }
+        .profile-hero { position: relative; height: 380px; overflow: hidden; }
+        .profile-hero-image { width: 100%; height: 100%; object-fit: cover; }
+        .profile-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, var(--lounge-black) 0%, rgba(8, 8, 8, 0.4) 50%, transparent 100%); }
+        .profile-back-btn { position: absolute; top: 16px; left: 16px; width: 40px; height: 40px; background: rgba(8, 8, 8, 0.5); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--text-primary); cursor: pointer; z-index: 10; }
+        .profile-back-btn svg { width: 20px; height: 20px; }
+        .profile-hero-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; z-index: 5; }
+        .profile-badges-row { display: flex; gap: 8px; margin-bottom: 12px; }
+        .profile-badge { padding: 6px 12px; background: rgba(8, 8, 8, 0.5); backdrop-filter: blur(10px); border-radius: 8px; font-size: 0.75rem; font-weight: 500; display: flex; align-items: center; gap: 5px; }
+        .profile-badge.verified { color: var(--accent-gold); border: 1px solid rgba(201, 169, 98, 0.3); }
+        .profile-badge.online { color: #6fcf97; border: 1px solid rgba(111, 207, 151, 0.3); }
+        .profile-badge.online::before { content: ''; width: 6px; height: 6px; background: #6fcf97; border-radius: 50%; }
+        .profile-name-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; }
+        .profile-name { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 500; color: var(--text-primary); }
+        .profile-age { font-size: 1.4rem; color: var(--text-secondary); font-weight: 300; }
+        .profile-location { display: flex; align-items: center; gap: 6px; color: var(--text-muted); font-size: 0.9rem; }
+        .profile-location svg { width: 14px; height: 14px; }
+        .profile-body { padding: 0 20px; }
+        .profile-main-actions { display: flex; gap: 12px; margin: -30px 0 24px; position: relative; z-index: 10; }
+        .profile-action-btn { flex: 1; padding: 14px; border-radius: 14px; font-size: 0.9rem; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; border: none; font-family: 'Outfit', sans-serif; transition: transform 0.2s; }
+        .profile-action-btn:hover { transform: translateY(-2px); }
+        .profile-action-btn.primary { background: linear-gradient(135deg, var(--accent-rose), var(--accent-rose-dark)); color: #fff; box-shadow: 0 8px 25px var(--glow-rose); }
+        .profile-action-btn.secondary { background: var(--glass-strong); border: 1px solid var(--glass-border); color: var(--text-primary); }
+        .profile-action-btn svg { width: 18px; height: 18px; }
+        .profile-section { margin-bottom: 24px; }
+        .profile-section-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: var(--text-primary); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .profile-bio { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; }
+        .smoking-prefs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .smoking-pref-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 12px; padding: 14px; }
+        .pref-icon { font-size: 1.3rem; margin-bottom: 8px; }
+        .pref-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+        .pref-value { font-size: 0.9rem; color: var(--text-primary); }
+        .strain-tags, .interest-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+        .strain-tag { padding: 8px 14px; background: linear-gradient(135deg, rgba(74, 124, 89, 0.15), rgba(74, 124, 89, 0.05)); border: 1px solid rgba(74, 124, 89, 0.25); border-radius: 20px; font-size: 0.8rem; color: var(--accent-green-light); }
+        .interest-tag { padding: 8px 14px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px; font-size: 0.8rem; color: var(--text-secondary); }
+        .photo-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .gallery-photo { aspect-ratio: 1; border-radius: 10px; overflow: hidden; cursor: pointer; }
+        .gallery-photo img { width: 100%; height: 100%; object-fit: cover; }
+        .session-card { background: linear-gradient(135deg, var(--lounge-ember), rgba(139, 77, 98, 0.1)); border: 1px solid rgba(139, 77, 98, 0.2); border-radius: 14px; padding: 16px; display: flex; align-items: center; gap: 14px; }
+        .session-icon { width: 50px; height: 50px; background: linear-gradient(135deg, var(--accent-rose), var(--accent-rose-dark)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 4px 15px var(--glow-rose); }
+        .session-info { flex: 1; }
+        .session-title { font-weight: 500; color: var(--text-primary); margin-bottom: 2px; }
+        .session-subtitle { font-size: 0.8rem; color: var(--text-muted); }
+        .session-time { text-align: right; }
+        .session-day { font-size: 0.75rem; color: var(--text-muted); }
+        .session-hours { font-size: 0.85rem; color: var(--accent-rose); }
+        
+        .bottom-nav { position: absolute; bottom: 0; left: 0; right: 0; display: flex; justify-content: space-around; align-items: center; padding: 10px 16px; padding-bottom: max(10px, env(safe-area-inset-bottom)); background: rgba(8, 8, 8, 0.95); backdrop-filter: blur(20px); border-top: 1px solid var(--glass-border); z-index: 100; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; color: var(--text-muted); transition: all 0.2s ease; padding: 6px 14px; border-radius: 10px; cursor: pointer; position: relative; }
+        .nav-item::before { content: ''; position: absolute; top: -1px; left: 50%; transform: translateX(-50%); width: 0; height: 2px; background: var(--accent-gold); transition: width 0.2s ease; }
+        .nav-item:hover { color: var(--text-secondary); }
+        .nav-item.active { color: var(--accent-gold); }
+        .nav-item.active::before { width: 20px; }
+        .nav-item svg { width: 20px; height: 20px; }
+        .nav-label { font-size: 0.6rem; font-weight: 500; letter-spacing: 0.3px; text-transform: uppercase; }
+        
+        .match-overlay { position: fixed; inset: 0; background: rgba(8, 8, 8, 0.97); backdrop-filter: blur(30px); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .match-overlay.show { display: flex; }
+        .match-content { text-align: center; }
+        .match-leaves { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+        .match-leaf { position: absolute; font-size: 20px; opacity: 0; }
+        .match-icon { width: 90px; height: 90px; margin: 0 auto 24px; background: linear-gradient(135deg, var(--accent-green), var(--accent-rose)); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 60px var(--glow-rose), 0 0 100px var(--glow-green); }
+        .match-icon svg { width: 44px; height: 44px; color: #fff; }
+        .match-title { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 500; color: var(--text-primary); margin-bottom: 8px; }
+        .match-subtitle { color: var(--text-secondary); margin-bottom: 32px; font-size: 0.95rem; }
+        .match-photos { display: flex; justify-content: center; align-items: center; margin-bottom: 36px; }
+        .match-photo { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid var(--lounge-charcoal); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .match-photo:first-child { transform: translateX(15px); z-index: 1; }
+        .match-photo:last-child { transform: translateX(-15px); }
+        .match-actions { display: flex; flex-direction: column; gap: 10px; }
+        .match-btn { padding: 15px 44px; border-radius: 12px; font-size: 0.9rem; font-weight: 500; cursor: pointer; border: none; font-family: 'Outfit', sans-serif; transition: transform 0.2s; }
+        .match-btn:hover { transform: translateY(-2px); }
+        .match-btn.primary { background: linear-gradient(135deg, var(--accent-rose), var(--accent-rose-dark)); color: #fff; box-shadow: 0 8px 25px var(--glow-rose); }
+        .match-btn.secondary { background: var(--glass); border: 1px solid var(--glass-border); color: var(--text-secondary); }
+        .placeholder-bg { width: 100%; height: 100%; background: linear-gradient(135deg, var(--lounge-charcoal), var(--lounge-ember)); display: flex; align-items: center; justify-content: center; font-size: 3rem; }
+    </style>
+</head>
+<body>
+    <div class="lounge-atmosphere">
+        <div class="ambient-light rose"></div>
+        <div class="ambient-light gold"></div>
+        <div class="ambient-light green"></div>
+        <div class="smoke-container" id="smokeContainer"></div>
+        <div class="ember-container" id="emberContainer"></div>
+        <div class="leaf-container" id="leafContainer"></div>
+    </div>
+    <div class="noise-overlay"></div>
+    <div class="vignette"></div>
+
+    <div class="app-container">
+        <header class="header">
+            <div class="logo-container">
+                <img src="https://i.ibb.co/TDqB2LzW/9761-A41-E-FDED-4-E46-BC8-E-6-F33651-E111-A.png" alt="StonelyFans" class="logo">
+                <span class="brand-name">Stonely<span>Fans</span></span>
+            </div>
+            <div class="header-actions">
+                <button class="icon-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                    <span class="notification-badge"></span>
+                </button>
+                <button class="icon-btn" onclick="switchPage('myprofile')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </button>
+            </div>
+        </header>
+
+        <div class="page-container">
+            <!-- DISCOVER PAGE -->
+            <div class="page discover-page active" id="discoverPage">
+                <div class="section-header">
+                    <h2 class="section-title"><span>🔥</span> Hot Right Now</h2>
+                    <span class="section-action">See all</span>
+                </div>
+                <div class="stories-row">
+                    <div class="story-item"><div class="story-ring add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div><span class="story-name">Add Story</span></div>
+                    <div class="story-item" onclick="openProfile('jasmine')"><div class="story-ring"><img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=200&h=200&fit=crop" class="story-avatar"></div><span class="story-name">Jasmine</span></div>
+                    <div class="story-item" onclick="openProfile('luna')"><div class="story-ring"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop" class="story-avatar"></div><span class="story-name">Luna</span></div>
+                    <div class="story-item" onclick="openProfile('sage')"><div class="story-ring"><img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=200&h=200&fit=crop" class="story-avatar"></div><span class="story-name">Sage</span></div>
+                    <div class="story-item" onclick="openProfile('willow')"><div class="story-ring"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop" class="story-avatar"></div><span class="story-name">Willow</span></div>
+                    <div class="story-item" onclick="openProfile('aurora')"><div class="story-ring"><img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=200&h=200&fit=crop" class="story-avatar"></div><span class="story-name">Aurora</span></div>
+                </div>
+
+                <div class="vibe-banner" onclick="switchPage('matches')">
+                    <div class="vibe-icon">🍃</div>
+                    <div class="vibe-content"><div class="vibe-title">Ready to Vibe?</div><div class="vibe-subtitle">Find your smoking buddy tonight</div></div>
+                    <div class="vibe-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M9 18l6-6-6-6"/></svg></div>
+                </div>
+
+                <div class="section-header"><h2 class="section-title"><span>✨</span> Featured</h2><span class="section-action">More</span></div>
+                <div class="featured-grid">
+                    <div class="featured-card hero" onclick="openProfile('jasmine')">
+                        <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800&h=500&fit=crop" alt="Featured">
+                        <div class="featured-overlay"></div>
+                        <div class="featured-content">
+                            <div class="featured-badges"><span class="featured-badge gold">⭐ Top Pick</span><span class="featured-badge green">🍃 420 Friendly</span><span class="featured-badge online">Online</span></div>
+                            <div class="featured-name">Jasmine, 24</div>
+                            <div class="featured-info"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>2 miles away • Los Angeles</div>
+                        </div>
+                    </div>
+                    <div class="featured-card" onclick="openProfile('luna')"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=530&fit=crop"><div class="featured-overlay"></div><div class="featured-content"><div class="featured-badges"><span class="featured-badge online">Online</span></div><div class="featured-name">Luna, 26</div><div class="featured-info">3 mi • Venice</div></div></div>
+                    <div class="featured-card" onclick="openProfile('sage')"><img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=530&fit=crop"><div class="featured-overlay"></div><div class="featured-content"><div class="featured-badges"><span class="featured-badge green">🌿 Sativa</span></div><div class="featured-name">Sage, 23</div><div class="featured-info">5 mi • Silver Lake</div></div></div>
+                </div>
+
+                <div class="strain-section">
+                    <div class="section-header"><h2 class="section-title"><span>🌿</span> Filter by Vibe</h2></div>
+                    <div class="strain-pills">
+                        <div class="strain-pill active">✨ All</div>
+                        <div class="strain-pill">🌿 Sativa</div>
+                        <div class="strain-pill">🍇 Indica</div>
+                        <div class="strain-pill">⚖️ Hybrid</div>
+                        <div class="strain-pill">🍪 Edibles</div>
+                        <div class="strain-pill">💨 Dabs</div>
+                    </div>
+                </div>
+
+                <div class="section-header"><h2 class="section-title"><span>📍</span> Nearby</h2><span class="section-action">Filter</span></div>
+                <div class="nearby-list">
+                    <div class="nearby-card" onclick="openProfile('willow')"><div class="nearby-avatar-wrapper"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop" class="nearby-avatar"><div class="nearby-online"></div></div><div class="nearby-info"><div class="nearby-header"><span class="nearby-name">Willow</span><span class="nearby-age">28</span><span class="nearby-verified"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span></div><div class="nearby-meta"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>1 mi</span><span>Echo Park</span></div></div><span class="nearby-tag">🍪 Edibles</span></div>
+                    <div class="nearby-card" onclick="openProfile('aurora')"><div class="nearby-avatar-wrapper"><img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=200&h=200&fit=crop" class="nearby-avatar"><div class="nearby-online"></div></div><div class="nearby-info"><div class="nearby-header"><span class="nearby-name">Aurora</span><span class="nearby-age">25</span></div><div class="nearby-meta"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>4 mi</span><span>Hollywood</span></div></div><span class="nearby-tag">🌙 Night Owl</span></div>
+                    <div class="nearby-card" onclick="openProfile('ivy')"><div class="nearby-avatar-wrapper"><img src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=200&h=200&fit=crop" class="nearby-avatar"></div><div class="nearby-info"><div class="nearby-header"><span class="nearby-name">Ivy</span><span class="nearby-age">27</span></div><div class="nearby-meta"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>6 mi</span><span>Santa Monica</span></div></div><span class="nearby-tag">🎵 Music</span></div>
+                </div>
+            </div>
+
+            <!-- MATCHES PAGE -->
+            <div class="page matches-page" id="matchesPage">
+                <div class="card-stack">
+                    <div class="profile-card card-behind-2"><div class="card-image-wrapper"><div class="placeholder-bg">🌿</div></div></div>
+                    <div class="profile-card card-behind-1"><div class="card-image-wrapper"><div class="placeholder-bg">💨</div></div></div>
+                    <div class="profile-card card-front" id="currentCard">
+                        <div class="card-image-wrapper">
+                            <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600&h=880&fit=crop" class="card-image">
+                            <div class="card-overlay"></div>
+                            <div class="card-top-badges"><span class="card-badge verified"><svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Verified</span><span class="card-badge online">Online</span></div>
+                            <div class="card-content">
+                                <div class="card-header"><span class="card-name">Jasmine</span><span class="card-age">24</span></div>
+                                <div class="card-location"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>2 miles • Los Angeles</div>
+                                <div class="card-tags"><span class="card-tag primary">🍃 420 Friendly</span><span class="card-tag">🎵 Live Music</span><span class="card-tag">🌙 Night Owl</span></div>
+                            </div>
+                        </div>
+                        <div class="swipe-indicator swipe-like" id="likeIndicator">VIBE</div>
+                        <div class="swipe-indicator swipe-nope" id="nopeIndicator">PASS</div>
+                    </div>
+                </div>
+                <div class="action-bar">
+                    <button class="action-btn small" onclick="rewind()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></button>
+                    <button class="action-btn nope" onclick="swipeLeft()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+                    <button class="action-btn like" onclick="swipeRight()"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+                    <button class="action-btn superlike" onclick="superLike()"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>
+                    <button class="action-btn small" onclick="openCurrentProfile()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+                </div>
+            </div>
+
+            <!-- PROFILE PAGE -->
+            <div class="page profile-page" id="profilePage">
+                <div class="profile-hero">
+                    <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800&h=800&fit=crop" class="profile-hero-image" id="profileHeroImage">
+                    <div class="profile-hero-overlay"></div>
+                    <button class="profile-back-btn" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+                    <div class="profile-hero-content">
+                        <div class="profile-badges-row"><span class="profile-badge verified"><svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Verified</span><span class="profile-badge online">Online</span></div>
+                        <div class="profile-name-row"><span class="profile-name" id="profileName">Jasmine</span><span class="profile-age" id="profileAge">24</span></div>
+                        <div class="profile-location" id="profileLocation"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>2 miles • Los Angeles</div>
+                    </div>
+                </div>
+                <div class="profile-body">
+                    <div class="profile-main-actions">
+                        <button class="profile-action-btn primary"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Like</button>
+                        <button class="profile-action-btn secondary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Message</button>
+                    </div>
+                    <div class="profile-section"><h3 class="profile-section-title"><span>💫</span> About Me</h3><p class="profile-bio" id="profileBio">Looking for someone to share good vibes and even better strains with. Let's roll one and see where the night takes us ✨</p></div>
+                    <div class="profile-section">
+                        <h3 class="profile-section-title"><span>🍃</span> Smoking Preferences</h3>
+                        <div class="smoking-prefs">
+                            <div class="smoking-pref-card"><div class="pref-icon">🌿</div><div class="pref-label">Strain</div><div class="pref-value" id="prefStrain">Sativa</div></div>
+                            <div class="smoking-pref-card"><div class="pref-icon">💨</div><div class="pref-label">Method</div><div class="pref-value" id="prefMethod">Joints & Bongs</div></div>
+                            <div class="smoking-pref-card"><div class="pref-icon">📅</div><div class="pref-label">Frequency</div><div class="pref-value" id="prefFrequency">Daily</div></div>
+                            <div class="smoking-pref-card"><div class="pref-icon">🎯</div><div class="pref-label">Tolerance</div><div class="pref-value" id="prefTolerance">High</div></div>
+                        </div>
+                    </div>
+                    <div class="profile-section"><h3 class="profile-section-title"><span>⭐</span> Favorite Strains</h3><div class="strain-tags" id="favoriteStrains"><span class="strain-tag">🍋 Lemon Haze</span><span class="strain-tag">🍇 Purple Kush</span></div></div>
+                    <div class="profile-section"><h3 class="profile-section-title"><span>🎵</span> Interests</h3><div class="interest-tags" id="interestTags"><span class="interest-tag">🎵 Live Music</span><span class="interest-tag">🌙 Night Owl</span></div></div>
+                    <div class="profile-section"><h3 class="profile-section-title"><span>📸</span> Photos</h3><div class="photo-gallery" id="photoGallery"><div class="gallery-photo"><img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=300&h=300&fit=crop"></div></div></div>
+                    <div class="profile-section"><h3 class="profile-section-title"><span>🕐</span> Session Availability</h3><div class="session-card"><div class="session-icon">🌙</div><div class="session-info"><div class="session-title">Best Time to Sesh</div><div class="session-subtitle">Usually free evenings</div></div><div class="session-time"><div class="session-day">Most days</div><div class="session-hours">After 7 PM</div></div></div></div>
+                </div>
+            </div>
+
+            <!-- MY PROFILE PAGE -->
+            <div class="page profile-page" id="myprofilePage">
+                <div class="profile-hero">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=800&fit=crop" class="profile-hero-image">
+                    <div class="profile-hero-overlay"></div>
+                    <button class="profile-back-btn" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+                    <div class="profile-hero-content">
+                        <div class="profile-badges-row"><span class="profile-badge verified"><svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Verified</span></div>
+                        <div class="profile-name-row"><span class="profile-name">You</span><span class="profile-age">25</span></div>
+                        <div class="profile-location"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>Los Angeles, CA</div>
+                    </div>
+                </div>
+                <div class="profile-body">
+                    <div class="profile-main-actions"><button class="profile-action-btn secondary" style="flex:1;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit Profile</button></div>
+                    <div class="profile-section"><h3 class="profile-section-title"><span>💫</span> About Me</h3><p class="profile-bio">Just a chill soul looking for good vibes and even better company. 420 friendly obviously 🍃</p></div>
+                    <div class="profile-section">
+                        <h3 class="profile-section-title"><span>🍃</span> My Smoking Preferences</h3>
+                        <div class="smoking-prefs">
+                            <div class="smoking-pref-card"><div class="pref-icon">🌿</div><div class="pref-label">Strain</div><div class="pref-value">Hybrid</div></div>
+                            <div class="smoking-pref-card"><div class="pref-icon">💨</div><div class="pref-label">Method</div><div class="pref-value">Vape & Edibles</div></div>
+                            <div class="smoking-pref-card"><div class="pref-icon">📅</div><div class="pref-label">Frequency</div><div class="pref-value">Weekends</div></div>
+                            <div class="smoking-pref-card"><div class="pref-icon">🎯</div><div class="pref-label">Tolerance</div><div class="pref-value">Medium</div></div>
+                        </div>
+                    </div>
+                    <div class="profile-section"><h3 class="profile-section-title"><span>⭐</span> Favorite Strains</h3><div class="strain-tags"><span class="strain-tag">🔥 OG Kush</span><span class="strain-tag">🍊 Tangie</span></div></div>
+                </div>
+            </div>
+        </div>
+
+        <nav class="bottom-nav">
+            <a class="nav-item active" data-page="discover" onclick="switchPage('discover')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg><span class="nav-label">Discover</span></a>
+            <a class="nav-item" data-page="matches" onclick="switchPage('matches')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="nav-label">Match</span></a>
+            <a class="nav-item" onclick="alert('Chat coming soon! 🍃')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="nav-label">Chat</span></a>
+            <a class="nav-item" data-page="myprofile" onclick="switchPage('myprofile')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="nav-label">Profile</span></a>
+        </nav>
+    </div>
+
+    <div class="match-overlay" id="matchOverlay">
+        <div class="match-leaves" id="matchLeaves"></div>
+        <div class="match-content" id="matchContent">
+            <div class="match-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+            <h2 class="match-title">It's a Vibe! 🍃</h2>
+            <p class="match-subtitle">You and <span id="matchName">Jasmine</span> liked each other</p>
+            <div class="match-photos"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop" class="match-photo"><img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=200&h=200&fit=crop" class="match-photo" id="matchPhoto"></div>
+            <div class="match-actions"><button class="match-btn primary" onclick="closeMatch()">Send Message</button><button class="match-btn secondary" onclick="closeMatch()">Keep Vibing</button></div>
+        </div>
+    </div>
+
+    <script>
+        const profiles = {
+            jasmine: { name: "Jasmine", age: 24, location: "2 miles • Los Angeles", image: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600&h=880&fit=crop", heroImage: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800&h=800&fit=crop", tags: ["🍃 420 Friendly", "🎵 Live Music", "🌙 Night Owl"], online: true, verified: true, bio: "Looking for someone to share good vibes and even better strains with. Let's roll one and see where the night takes us ✨", strain: "Sativa", method: "Joints & Bongs", frequency: "Daily", tolerance: "High", favoriteStrains: ["🍋 Lemon Haze", "🍇 Purple Kush", "🍪 Girl Scout Cookies"], interests: ["🎵 Live Music", "🌙 Night Owl", "🎨 Art", "🧘 Yoga"], photos: ["https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=300&h=300&fit=crop", "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&h=300&fit=crop", "https://images.unsplash.com/photo-1496440737103-cd596325d314?w=300&h=300&fit=crop"] },
+            luna: { name: "Luna", age: 26, location: "3 miles • Venice Beach", image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&h=880&fit=crop", heroImage: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800&h=800&fit=crop", tags: ["🍃 Daily Toker", "🎨 Artist", "🧘 Yoga"], online: true, verified: true, bio: "Artist by day, stoner by night 🎨 Love painting while high.", strain: "Hybrid", method: "Vape Pen", frequency: "Daily", tolerance: "High", favoriteStrains: ["🌈 Zkittlez", "🍊 Mimosa", "🎨 Gelato"], interests: ["🎨 Art", "🧘 Yoga", "🌅 Sunsets"], photos: ["https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&h=300&fit=crop"] },
+            sage: { name: "Sage", age: 23, location: "5 miles • Silver Lake", image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&h=880&fit=crop", heroImage: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&h=800&fit=crop", tags: ["🌿 Sativa", "🎸 Musician", "🌅 Sunsets"], online: false, verified: true, bio: "Musician vibes only 🎸 I write my best songs when I'm elevated.", strain: "Sativa", method: "Joints", frequency: "Weekends", tolerance: "Medium", favoriteStrains: ["⚡ Green Crack", "🍋 Super Lemon Haze"], interests: ["🎸 Guitar", "🎤 Singing", "🌅 Sunsets"], photos: ["https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=300&h=300&fit=crop"] },
+            willow: { name: "Willow", age: 28, location: "1 mile • Echo Park", image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&h=880&fit=crop", heroImage: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&h=800&fit=crop", tags: ["💨 Edibles", "📚 Reader", "🍷 Wine & Weed"], online: true, verified: false, bio: "Edibles connoisseur 🍪 Love a good book and a strong edible.", strain: "Indica", method: "Edibles", frequency: "Daily", tolerance: "Very High", favoriteStrains: ["🍇 Granddaddy Purple", "🫐 Blueberry"], interests: ["📚 Reading", "🍷 Wine", "🍳 Cooking"], photos: ["https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&h=300&fit=crop"] },
+            aurora: { name: "Aurora", age: 25, location: "4 miles • Hollywood", image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&h=880&fit=crop", heroImage: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&h=800&fit=crop", tags: ["🍃 420", "🎬 Films", "🌙 Night Sessions"], online: true, verified: true, bio: "Film buff and night owl 🎬 Nothing beats watching a classic movie while elevated.", strain: "Hybrid", method: "Bong & Dabs", frequency: "Daily", tolerance: "High", favoriteStrains: ["🎬 Wedding Cake", "🍯 Honey Bun"], interests: ["🎬 Films", "🌙 Night Owl", "🎮 Gaming"], photos: ["https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&h=300&fit=crop"] },
+            ivy: { name: "Ivy", age: 27, location: "6 miles • Santa Monica", image: "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=600&h=880&fit=crop", heroImage: "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=800&h=800&fit=crop", tags: ["🎵 Live Music", "🏄 Beach", "🌿 Organic"], online: false, verified: true, bio: "Beach babe & music lover 🏄‍♀️", strain: "Sativa", method: "Organic Joints", frequency: "Social", tolerance: "Medium", favoriteStrains: ["🌊 Maui Wowie", "🏝️ Pineapple Express"], interests: ["🎵 Concerts", "🏄 Surfing", "🏖️ Beach"], photos: ["https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=300&h=300&fit=crop"] }
+        };
+        const profileOrder = ['jasmine', 'luna', 'sage', 'willow', 'aurora', 'ivy'];
+        let currentProfileIndex = 0, currentPage = 'discover', previousPage = 'discover';
+
+        // Smoke effects
+        function createSmokeParticles() {
+            const container = document.getElementById('smokeContainer');
+            for (let i = 0; i < 6; i++) {
+                const p = document.createElement('div');
+                p.className = 'smoke-particle';
+                p.style.width = p.style.height = `${100 + Math.random() * 150}px`;
+                p.style.left = `${Math.random() * 100}%`;
+                p.style.bottom = '-100px';
+                container.appendChild(p);
+                animateSmoke(p);
+            }
+        }
+        function animateSmoke(p) {
+            anime({ targets: p, translateY: [0, -window.innerHeight - 200], translateX: [(Math.random()-0.5)*100], scale: [0.5, 1.5], opacity: [0, 0.5, 0], easing: 'easeOutQuad', duration: 15000 + Math.random() * 10000, complete: () => { p.style.left = `${Math.random()*100}%`; animateSmoke(p); } });
+        }
+        function createEmbers() {
+            const container = document.getElementById('emberContainer');
+            for (let i = 0; i < 10; i++) {
+                const e = document.createElement('div');
+                e.className = 'ember';
+                e.style.left = `${10 + Math.random() * 80}%`;
+                e.style.bottom = '5%';
+                container.appendChild(e);
+                animateEmber(e, i * 600);
+            }
+        }
+        function animateEmber(e, delay) {
+            anime({ targets: e, translateY: [0, -(150 + Math.random() * 250)], translateX: [(Math.random()-0.5)*50], opacity: [0, 1, 1, 0], scale: [0, 1, 0.5], easing: 'easeOutQuad', duration: 3500 + Math.random() * 2500, delay, complete: () => { e.style.left = `${10+Math.random()*80}%`; animateEmber(e, Math.random()*1500); } });
+        }
+        function createLeaves() {
+            const container = document.getElementById('leafContainer');
+            const emojis = ['🍃', '🌿', '☘️'];
+            for (let i = 0; i < 5; i++) {
+                const l = document.createElement('div');
+                l.className = 'leaf';
+                l.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+                l.style.left = `${Math.random()*100}%`;
+                l.style.top = '-20px';
+                container.appendChild(l);
+                animateLeaf(l, i * 2500);
+            }
+        }
+        function animateLeaf(l, delay) {
+            anime({ targets: l, translateY: [0, window.innerHeight + 50], translateX: [(Math.random()-0.5)*100], rotate: [0, 360*(Math.random()>0.5?1:-1)], opacity: [0, 0.35, 0.35, 0], easing: 'easeInOutSine', duration: 7000 + Math.random()*5000, delay, complete: () => { l.style.left = `${Math.random()*100}%`; animateLeaf(l, Math.random()*4000); } });
+        }
+        function animateAmbient() { anime({ targets: '.ambient-light', opacity: [0.4, 0.7, 0.4], scale: [1, 1.1, 1], easing: 'easeInOutSine', duration: 8000, loop: true, delay: anime.stagger(2000) }); }
+
+        // Card swiping
+        const card = document.getElementById('currentCard');
+        const likeInd = document.getElementById('likeIndicator');
+        const nopeInd = document.getElementById('nopeIndicator');
+        let startX = 0, currX = 0, dragging = false;
+        card.addEventListener('mousedown', e => { dragging = true; startX = e.clientX; card.style.transition = 'none'; });
+        card.addEventListener('touchstart', e => { dragging = true; startX = e.touches[0].clientX; card.style.transition = 'none'; }, {passive:true});
+        document.addEventListener('mousemove', e => drag(e.clientX));
+        document.addEventListener('touchmove', e => drag(e.touches[0].clientX), {passive:true});
+        document.addEventListener('mouseup', endDrag);
+        document.addEventListener('touchend', endDrag);
+        function drag(x) {
+            if (!dragging) return;
+            currX = x;
+            const diff = currX - startX;
+            card.style.transform = `translateX(${diff}px) rotate(${diff*0.08}deg)`;
+            likeInd.style.opacity = diff > 50 ? Math.min((diff-50)/100, 1) : 0;
+            nopeInd.style.opacity = diff < -50 ? Math.min((-diff-50)/100, 1) : 0;
+        }
+        function endDrag() {
+            if (!dragging) return;
+            dragging = false;
+            const diff = currX - startX;
+            card.style.transition = 'transform 0.4s ease';
+            if (diff > 100) swipeRight();
+            else if (diff < -100) swipeLeft();
+            else { card.style.transform = ''; likeInd.style.opacity = nopeInd.style.opacity = 0; }
+        }
+        function swipeRight() { anime({ targets: card, translateX: '150%', rotate: 20, opacity: 0, duration: 400, easing: 'easeOutQuad', complete: () => { if (Math.random() > 0.4) showMatch(); loadNext(); } }); likeInd.style.opacity = 1; }
+        function swipeLeft() { anime({ targets: card, translateX: '-150%', rotate: -20, opacity: 0, duration: 400, easing: 'easeOutQuad', complete: loadNext }); nopeInd.style.opacity = 1; }
+        function superLike() { anime({ targets: card, translateY: '-150%', scale: 0.5, opacity: 0, duration: 400, complete: () => { showMatch(); loadNext(); } }); }
+        function rewind() { currentProfileIndex = (currentProfileIndex - 1 + profileOrder.length) % profileOrder.length; loadNext(); }
+        function loadNext() {
+            currentProfileIndex = (currentProfileIndex + 1) % profileOrder.length;
+            const p = profiles[profileOrder[currentProfileIndex]];
+            card.style.transition = 'none'; card.style.transform = ''; card.style.opacity = '1';
+            card.querySelector('.card-image').src = p.image;
+            card.querySelector('.card-name').textContent = p.name;
+            card.querySelector('.card-age').textContent = p.age;
+            card.querySelector('.card-location').innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>${p.location}`;
+            card.querySelector('.card-tags').innerHTML = p.tags.map((t,i) => `<span class="card-tag ${i===0?'primary':''}">${t}</span>`).join('');
+            card.querySelector('.card-badge.online').style.display = p.online ? 'flex' : 'none';
+            card.querySelector('.card-badge.verified').style.display = p.verified ? 'flex' : 'none';
+            likeInd.style.opacity = nopeInd.style.opacity = 0;
+            anime({ targets: card, scale: [0.9, 1], opacity: [0, 1], duration: 300, easing: 'easeOutQuad' });
+        }
+        function openCurrentProfile() { openProfile(profileOrder[currentProfileIndex]); }
+
+        function openProfile(key) {
+            const p = profiles[key]; if (!p) return;
+            document.getElementById('profileHeroImage').src = p.heroImage;
+            document.getElementById('profileName').textContent = p.name;
+            document.getElementById('profileAge').textContent = p.age;
+            document.getElementById('profileLocation').innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>${p.location}`;
+            document.getElementById('profileBio').textContent = p.bio;
+            document.getElementById('prefStrain').textContent = p.strain;
+            document.getElementById('prefMethod').textContent = p.method;
+            document.getElementById('prefFrequency').textContent = p.frequency;
+            document.getElementById('prefTolerance').textContent = p.tolerance;
+            document.getElementById('favoriteStrains').innerHTML = p.favoriteStrains.map(s => `<span class="strain-tag">${s}</span>`).join('');
+            document.getElementById('interestTags').innerHTML = p.interests.map(i => `<span class="interest-tag">${i}</span>`).join('');
+            document.getElementById('photoGallery').innerHTML = p.photos.map(ph => `<div class="gallery-photo"><img src="${ph}"></div>`).join('');
+            switchPage('profile');
+        }
+
+        function switchPage(name) {
+            previousPage = currentPage; currentPage = name;
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            const page = document.getElementById(name + 'Page');
+            if (page) { page.classList.add('active'); page.scrollTop = 0; }
+            const nav = document.querySelector(`[data-page="${name}"]`);
+            if (nav) nav.classList.add('active');
+        }
+        function goBack() { switchPage(previousPage); }
+
+        function showMatch() {
+            const p = profiles[profileOrder[currentProfileIndex]];
+            document.getElementById('matchName').textContent = p.name;
+            document.getElementById('matchPhoto').src = p.heroImage;
+            document.getElementById('matchOverlay').classList.add('show');
+            createMatchLeaves();
+            anime({ targets: '.match-icon', scale: [0.5, 1.1, 1], opacity: [0, 1], duration: 800, easing: 'easeOutElastic(1, 0.5)', delay: 200 });
+        }
+        function createMatchLeaves() {
+            const c = document.getElementById('matchLeaves'); c.innerHTML = '';
+            const emojis = ['🍃', '🌿', '💨', '✨', '💜'];
+            for (let i = 0; i < 15; i++) {
+                const l = document.createElement('div');
+                l.className = 'match-leaf';
+                l.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+                l.style.left = `${Math.random()*100}%`;
+                l.style.top = '-30px';
+                c.appendChild(l);
+                anime({ targets: l, translateY: window.innerHeight + 50, translateX: (Math.random()-0.5)*200, rotate: 360*(Math.random()>0.5?1:-1), opacity: [0, 1, 1, 0], duration: 3000+Math.random()*2000, delay: i*100, easing: 'easeOutQuad' });
+            }
+        }
+        function closeMatch() { anime({ targets: document.getElementById('matchOverlay'), opacity: [1, 0], duration: 300, easing: 'easeOutQuad', complete: () => document.getElementById('matchOverlay').classList.remove('show') }); }
+
+        document.querySelectorAll('.strain-pill').forEach(pill => pill.addEventListener('click', () => { document.querySelectorAll('.strain-pill').forEach(p => p.classList.remove('active')); pill.classList.add('active'); }));
+
+        document.addEventListener('DOMContentLoaded', () => {
+            createSmokeParticles(); createEmbers(); createLeaves(); animateAmbient();
+            anime({ targets: '.featured-card', opacity: [0, 1], translateY: [20, 0], duration: 600, delay: anime.stagger(100, {start: 300}), easing: 'easeOutQuad' });
+            anime({ targets: '.nearby-card', opacity: [0, 1], translateX: [-20, 0], duration: 500, delay: anime.stagger(80, {start: 600}), easing: 'easeOutQuad' });
+        });
+    </script>
+</body>
+</html>

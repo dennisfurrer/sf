@@ -1,0 +1,248 @@
+{
+  "common": {
+    "loading": "Laden...",
+    "error": "Etwas ist schief gelaufen",
+    "retry": "Erneut versuchen",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "back": "Zurück",
+    "next": "Weiter",
+    "done": "Fertig",
+    "seeAll": "Alle anzeigen",
+    "more": "Mehr"
+  },
+  "nav": {
+    "home": "Startseite",
+    "discover": "Entdecken",
+    "sesh": "Sesh",
+    "vibe": "Vibe",
+    "matches": "Matches",
+    "match": "Match",
+    "chat": "Chat",
+    "profile": "Profil"
+  },
+  "header": {
+    "online": "{count} Online",
+    "notifications": "Benachrichtigungen",
+    "search": "Suchen",
+    "language": "Sprache"
+  },
+  "discover": {
+    "tagline": "Wo gute Vibes auf gute Zeiten treffen",
+    "stories": "Stories",
+    "popularCreators": "Beliebte Creator",
+    "features": {
+      "sesh": {
+        "title": "Jetzt Sesh",
+        "description": "Finde jemanden zum Rauchen in den nächsten 10 Minuten",
+        "cta": "Sessions ansehen"
+      },
+      "vibe": {
+        "title": "Vibe Check",
+        "description": "Skip den Smalltalk. Sofort Video-Match.",
+        "cta": "Loslegen",
+        "instant": "Zufälliges Match"
+      },
+      "match": {
+        "title": "Match",
+        "description": "Finde deinen Smoke-Partner fürs Leben",
+        "cta": "Matching starten",
+        "compatibility": "Rauch-Kompatibilität"
+      }
+    },
+    "vibeBanner": {
+      "title": "Finde deinen Vibe",
+      "subtitle": "Swipe los und finde deinen Smoke Buddy",
+      "cta": "Matching starten"
+    },
+    "featured": "Beliebte Creator",
+    "topCreator": "Top Creator",
+    "vibeFilters": {
+      "all": "Alle",
+      "sativa": "Sativa",
+      "indica": "Indica",
+      "hybrid": "Hybrid",
+      "edibles": "Edibles",
+      "dabs": "Dabs"
+    },
+    "nearby": "In der Nähe",
+    "liveNow": "Jetzt Live"
+  },
+  "match": {
+    "title": "Bääääämbuuu!",
+    "subtitle": "Gits eine?",
+    "sendMessage": "Nachricht senden",
+    "keepSwiping": "Weiter swipen",
+    "outOfProfiles": "Keine weiteren Profile in der Nähe",
+    "checkBackLater": "Schau später nochmal vorbei"
+  },
+  "swipe": {
+    "like": "VIBE",
+    "pass": "PASS",
+    "superlike": "SEELENVERWANDT",
+    "nope": "Nope",
+    "superLike": "Super Like",
+    "undo": "Rückgängig"
+  },
+  "chat": {
+    "title": "Nachrichten",
+    "noMessages": "Noch keine Nachrichten",
+    "startConversation": "Starte eine Unterhaltung durch ein Match",
+    "typeMessage": "Nachricht eingeben...",
+    "send": "Senden",
+    "online": "Online",
+    "lastSeen": "Zuletzt gesehen {time}",
+    "typing": "tippt...",
+    "quickActions": {
+      "smoke": "Rauchen?",
+      "chill": "Chill vibes",
+      "video": "Videocall?",
+      "hangout": "Abhängen?",
+      "vibing": "Einfach chillen",
+      "joint": "Einen drehen?",
+      "waveHi": "Winken",
+      "sendGif": "GIF senden",
+      "icebreaker": "Eisbrecher"
+    }
+  },
+  "profile": {
+    "editProfile": "Profil bearbeiten",
+    "settings": "Einstellungen",
+    "premium": "Premium",
+    "verified": "Verifiziert",
+    "online": "Online",
+    "distance": "{distance} entfernt",
+    "aboutMe": "Über mich",
+    "warStories": "War Stories",
+    "smokingPrefs": "Rauch-Vorlieben",
+    "strainType": "Sorte",
+    "method": "Methode",
+    "frequency": "Häufigkeit",
+    "tolerance": "Toleranz",
+    "favoriteStrains": "Lieblingssorten",
+    "interests": "Interessen",
+    "availability": "Verfügbarkeit",
+    "like": "Like",
+    "message": "Nachricht",
+    "photos": "Fotos",
+    "addPhoto": "Foto hinzufügen",
+    "bio": "Über mich",
+    "logout": "Abmelden"
+  },
+  "badge": {
+    "verified": "Verifiziert",
+    "online": "Online",
+    "live": "LIVE"
+  },
+  "warStoryPrompts": {
+    "legendarySession": "Meine legendärste Smoke Session war...",
+    "strainThatChanged": "Die Sorte, die mein Leben verändert hat...",
+    "swipeRightIf": "Du solltest nach rechts swipen, wenn...",
+    "idealSmokeBuddy": "Mein idealer Smoke Buddy ist jemand, der...",
+    "weirdestPlace": "Der verrückteste Ort, an dem ich je geraucht habe...",
+    "lookingFor": "Ich suche jemanden, der...",
+    "controversialOpinion": "Meine kontroverse Cannabis-Meinung ist...",
+    "perfectSesh": "Die perfekte Sesh beinhaltet..."
+  },
+  "preferences": {
+    "strainTypes": {
+      "sativa": "Sativa",
+      "indica": "Indica",
+      "hybrid": "Hybrid",
+      "all": "Alle Sorten"
+    },
+    "methods": {
+      "joints": "Joints",
+      "bongs": "Bongs",
+      "edibles": "Edibles",
+      "vapes": "Vapes",
+      "dabs": "Dabs",
+      "pipes": "Pfeifen"
+    },
+    "frequencies": {
+      "daily": "Täglich",
+      "weekly": "Wöchentlich",
+      "social": "Gesellig",
+      "special": "Besondere Anlässe"
+    },
+    "tolerances": {
+      "lightweight": "Leichtgewicht",
+      "moderate": "Moderat",
+      "veteran": "Veteran",
+      "ironLungs": "Eiserne Lunge"
+    }
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "account": "Konto",
+    "language": "Sprache",
+    "notifications": "Benachrichtigungen",
+    "privacy": "Datenschutz",
+    "help": "Hilfe & Support",
+    "logout": "Abmelden",
+    "version": "Version"
+  },
+  "sesh": {
+    "title": "Sesh",
+    "subtitle": "Finde jemanden zum Rauchen in deiner Nähe",
+    "live": "LIVE",
+    "virtualSession": "Virtuelle Session",
+    "join": "Beitreten",
+    "full": "Voll",
+    "liveNow": "Sessions laufen gerade",
+    "joinNow": "Spring rein und chill mit",
+    "noSessions": "Keine Sessions in der Nähe",
+    "beTheFirst": "Sei der Erste und hoste eine Sesh!",
+    "filters": {
+      "all": "Alle",
+      "live": "Jetzt Live",
+      "scheduled": "Geplant",
+      "virtual": "Virtuell"
+    },
+    "create": {
+      "title": "Sesh hosten",
+      "whatStrain": "Was rauchst du?",
+      "description": "Erzähl den Leuten, was sie erwartet",
+      "when": "Wann?",
+      "now": "Jetzt sofort",
+      "later": "Für später planen",
+      "capacity": "Wie viele Leute?",
+      "location": "Wo?",
+      "myPlace": "Bei mir",
+      "meetup": "Irgendwo treffen",
+      "virtual": "Virtuell (Videocall)",
+      "submit": "Sesh erstellen"
+    }
+  },
+  "vibe": {
+    "title": "Vibe Check",
+    "subtitle": "Skip den Smalltalk. Sofort Video-Match.",
+    "startMatching": "Loslegen",
+    "searching": "Suche deinen Vibe...",
+    "connected": "Verbunden!",
+    "tapToSkip": "Tippe zum Überspringen",
+    "addFriend": "Als Freund hinzufügen",
+    "keepVibing": "Weiter viben",
+    "report": "Melden",
+    "preferences": {
+      "title": "Stell deinen Vibe ein",
+      "smoking": "Rauchst du?",
+      "smokingNow": "Rauche gerade",
+      "notNow": "Gerade nicht",
+      "any": "Egal",
+      "lookingFor": "Ich suche",
+      "anyone": "Egal wer",
+      "sameGender": "Gleiches Geschlecht",
+      "differentGender": "Anderes Geschlecht",
+      "vibeStyle": "Vibe-Stil",
+      "chill": "Chill",
+      "chatty": "Gesprächig",
+      "party": "Party"
+    },
+    "endCall": "Auflegen",
+    "mutualVibe": "Gegenseitiger Vibe!",
+    "youBothVibed": "Ihr habt beide gematcht"
+  }
+}

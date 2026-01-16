@@ -1,0 +1,2309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>StonelyFans - Connect & Vibe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <style>
+        :root {
+            --velvet-black: #0a0608;
+            --velvet-deep: #120a0f;
+            --velvet-rich: #1a0f15;
+            --velvet-plum: #2d1a24;
+            --velvet-wine: #4a2035;
+            --velvet-rose: #6b2d4a;
+            --velvet-blush: #8b3d5c;
+            --velvet-pink: #b85a7a;
+            --velvet-light: #d4849e;
+            --gold-deep: #8b6914;
+            --gold-main: #c9a227;
+            --gold-bright: #f4d03f;
+            --gold-light: #ffe066;
+            --green-deep: #1a4d2e;
+            --green-main: #2d7a4a;
+            --green-bright: #4ade80;
+            --green-light: #86efac;
+            --cream: #faf5f0;
+            --cream-dark: #e8ddd4;
+            --text-primary: #faf5f0;
+            --text-secondary: #b8a8a0;
+            --text-muted: #7a6a65;
+            --glass: rgba(26, 15, 21, 0.85);
+            --glass-light: rgba(45, 26, 36, 0.7);
+            --glass-border: rgba(184, 90, 122, 0.25);
+            --glow-pink: rgba(184, 90, 122, 0.6);
+            --glow-gold: rgba(201, 162, 39, 0.5);
+            --glow-green: rgba(74, 222, 128, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: var(--velvet-black);
+            color: var(--text-primary);
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+        }
+
+        /* Velvet Atmosphere */
+        .velvet-atmosphere {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .ambient-glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.5;
+        }
+
+        .ambient-glow.pink-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(107, 45, 74, 0.4) 0%, transparent 70%);
+            bottom: -150px;
+            left: -100px;
+        }
+
+        .ambient-glow.pink-2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(139, 61, 92, 0.3) 0%, transparent 70%);
+            top: 10%;
+            right: -80px;
+        }
+
+        .ambient-glow.gold {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(201, 162, 39, 0.2) 0%, transparent 70%);
+            top: 30%;
+            left: 20%;
+        }
+
+        .ambient-glow.green {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(45, 122, 74, 0.15) 0%, transparent 70%);
+            bottom: 30%;
+            right: 10%;
+        }
+
+        .smoke-container {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+        }
+
+        .smoke-particle {
+            position: absolute;
+            background: radial-gradient(ellipse, rgba(255, 255, 255, 0.03) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(30px);
+        }
+
+        .ember-container {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+        }
+
+        .ember {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: var(--gold-bright);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--gold-main), 0 0 16px rgba(244, 208, 63, 0.5);
+            opacity: 0;
+        }
+
+        .noise-overlay {
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.02;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .vignette {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(ellipse at center, transparent 30%, rgba(10, 6, 8, 0.6) 100%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* App Container */
+        .app-container {
+            position: relative;
+            z-index: 2;
+            height: 100vh;
+            height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            max-width: 480px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        /* Hero Logo Section */
+        .hero-logo-section {
+            padding: 20px 20px 10px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--velvet-deep) 0%, transparent 100%);
+        }
+
+        .hero-logo {
+            width: 180px;
+            height: auto;
+            filter: drop-shadow(0 0 30px rgba(184, 90, 122, 0.4)) drop-shadow(0 0 60px rgba(201, 162, 39, 0.2));
+            animation: logoFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-8px) scale(1.02); }
+        }
+
+        .tagline {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.9rem;
+            font-style: italic;
+            color: var(--velvet-light);
+            margin-top: 8px;
+            letter-spacing: 1px;
+        }
+
+        /* Header */
+        .header {
+            padding: 10px 20px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .online-count {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--green-bright);
+        }
+
+        .online-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--green-bright);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.2); }
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .icon-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--velvet-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .icon-btn:hover {
+            background: var(--glass-light);
+            color: var(--text-primary);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--glow-pink);
+        }
+
+        .icon-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 10px;
+            height: 10px;
+            background: linear-gradient(135deg, var(--velvet-pink), var(--velvet-rose));
+            border-radius: 50%;
+            border: 2px solid var(--velvet-deep);
+            animation: pulse 1.5s infinite;
+        }
+
+        /* Page Container */
+        .page-container {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .page {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .page.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .page::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        .page::-webkit-scrollbar-thumb {
+            background: var(--velvet-wine);
+            border-radius: 2px;
+        }
+
+        /* Live Now Section */
+        .live-section {
+            padding: 0 16px 16px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .live-badge {
+            padding: 3px 8px;
+            background: linear-gradient(135deg, #ff4757, #ff6b81);
+            border-radius: 4px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            animation: livePulse 2s infinite;
+        }
+
+        @keyframes livePulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(255, 71, 87, 0); }
+        }
+
+        .section-action {
+            font-size: 0.8rem;
+            color: var(--gold-main);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .section-action:hover {
+            color: var(--gold-bright);
+        }
+
+        .live-scroll {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scrollbar-width: none;
+        }
+
+        .live-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .live-card {
+            flex-shrink: 0;
+            width: 130px;
+            aspect-ratio: 0.75;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .live-card:hover {
+            transform: scale(1.03);
+        }
+
+        .live-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .live-card-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(10, 6, 8, 0.95) 0%, rgba(10, 6, 8, 0.3) 40%, transparent 70%);
+        }
+
+        .live-card-top {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 6px;
+            background: rgba(255, 71, 87, 0.9);
+            border-radius: 4px;
+            font-size: 0.6rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .live-indicator::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            background: white;
+            border-radius: 50%;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .viewer-count {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            padding: 3px 6px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            border-radius: 4px;
+            font-size: 0.6rem;
+            color: white;
+        }
+
+        .viewer-count svg {
+            width: 10px;
+            height: 10px;
+        }
+
+        .live-card-bottom {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            right: 8px;
+        }
+
+        .live-card-name {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: white;
+            margin-bottom: 2px;
+        }
+
+        .live-card-tag {
+            font-size: 0.65rem;
+            color: var(--velvet-light);
+        }
+
+        /* Featured Creators */
+        .featured-section {
+            padding: 0 16px 16px;
+        }
+
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .featured-card {
+            position: relative;
+            aspect-ratio: 0.8;
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .featured-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px var(--glow-pink);
+        }
+
+        .featured-card.large {
+            grid-column: span 2;
+            aspect-ratio: 1.5;
+        }
+
+        .featured-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .featured-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .featured-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(10, 6, 8, 0.95) 0%, rgba(10, 6, 8, 0.4) 50%, transparent 70%);
+        }
+
+        .featured-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 14px;
+        }
+
+        .featured-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .badge {
+            padding: 4px 8px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            border-radius: 6px;
+            font-size: 0.6rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .badge.gold {
+            color: var(--gold-bright);
+            border: 1px solid rgba(201, 162, 39, 0.3);
+        }
+
+        .badge.green {
+            color: var(--green-bright);
+            border: 1px solid rgba(74, 222, 128, 0.3);
+        }
+
+        .badge.pink {
+            color: var(--velvet-pink);
+            border: 1px solid rgba(184, 90, 122, 0.3);
+        }
+
+        .badge.online::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--green-bright);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .featured-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: white;
+            margin-bottom: 4px;
+        }
+
+        .featured-card.large .featured-name {
+            font-size: 1.5rem;
+        }
+
+        .featured-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .featured-info span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .featured-info svg {
+            width: 12px;
+            height: 12px;
+        }
+
+        /* Swipe Section */
+        .swipe-section {
+            padding: 0 16px;
+        }
+
+        .card-stack {
+            position: relative;
+            height: 420px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 1000px;
+        }
+
+        .profile-card {
+            position: absolute;
+            width: 100%;
+            max-width: 340px;
+            height: 400px;
+            border-radius: 24px;
+            overflow: hidden;
+            background: var(--velvet-rich);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(107, 45, 74, 0.2);
+            cursor: grab;
+            user-select: none;
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .profile-card:active {
+            cursor: grabbing;
+        }
+
+        .profile-card.behind-1 {
+            transform: scale(0.92) translateY(20px);
+            filter: brightness(0.6);
+            z-index: 1;
+        }
+
+        .profile-card.behind-2 {
+            transform: scale(0.84) translateY(40px);
+            filter: brightness(0.4);
+            z-index: 0;
+        }
+
+        .profile-card.front {
+            z-index: 10;
+        }
+
+        .card-image-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-gradient {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(10, 6, 8, 0.98) 0%, rgba(10, 6, 8, 0.5) 40%, transparent 70%);
+        }
+
+        .card-top-badges {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            right: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            z-index: 5;
+        }
+
+        .card-badge {
+            padding: 6px 10px;
+            background: rgba(10, 6, 8, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .card-badge.verified {
+            color: var(--gold-bright);
+            border: 1px solid rgba(201, 162, 39, 0.3);
+        }
+
+        .card-badge.online {
+            color: var(--green-bright);
+        }
+
+        .card-badge.online::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--green-bright);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        .card-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            z-index: 5;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .card-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 500;
+            color: white;
+        }
+
+        .card-age {
+            font-size: 1.2rem;
+            color: var(--velvet-light);
+            font-weight: 300;
+        }
+
+        .card-location {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+        }
+
+        .card-location svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .card-tag {
+            padding: 6px 12px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--velvet-light);
+        }
+
+        .card-tag.primary {
+            background: linear-gradient(135deg, rgba(45, 122, 74, 0.3), rgba(45, 122, 74, 0.1));
+            border-color: rgba(74, 222, 128, 0.3);
+            color: var(--green-bright);
+        }
+
+        /* Swipe Indicators */
+        .swipe-indicator {
+            position: absolute;
+            top: 45%;
+            transform: translateY(-50%);
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        .swipe-like {
+            right: 20px;
+            background: rgba(74, 222, 128, 0.2);
+            border: 3px solid var(--green-bright);
+            color: var(--green-bright);
+            transform: translateY(-50%) rotate(15deg);
+        }
+
+        .swipe-nope {
+            left: 20px;
+            background: rgba(239, 68, 68, 0.2);
+            border: 3px solid #ef4444;
+            color: #ef4444;
+            transform: translateY(-50%) rotate(-15deg);
+        }
+
+        .swipe-super {
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, rgba(201, 162, 39, 0.3), rgba(184, 90, 122, 0.3));
+            border: 3px solid var(--gold-bright);
+            color: var(--gold-bright);
+        }
+
+        /* Action Bar */
+        .action-bar {
+            padding: 16px 20px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .action-btn {
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: none;
+            position: relative;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.12);
+        }
+
+        .action-btn:active {
+            transform: scale(0.95);
+        }
+
+        .action-btn.small {
+            width: 46px;
+            height: 46px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+        }
+
+        .action-btn.small svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .action-btn.small.rewind {
+            color: var(--gold-main);
+        }
+
+        .action-btn.small.boost {
+            color: var(--velvet-pink);
+        }
+
+        .action-btn.nope {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1));
+            border: 2px solid rgba(239, 68, 68, 0.5);
+        }
+
+        .action-btn.nope:hover {
+            box-shadow: 0 0 30px rgba(239, 68, 68, 0.4);
+        }
+
+        .action-btn.nope svg {
+            width: 24px;
+            height: 24px;
+            color: #ef4444;
+        }
+
+        .action-btn.like {
+            width: 68px;
+            height: 68px;
+            background: linear-gradient(135deg, var(--velvet-rose), var(--velvet-wine));
+            box-shadow: 0 8px 30px var(--glow-pink);
+        }
+
+        .action-btn.like:hover {
+            box-shadow: 0 12px 40px var(--glow-pink);
+        }
+
+        .action-btn.like svg {
+            width: 30px;
+            height: 30px;
+            color: white;
+        }
+
+        .action-btn.super {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, rgba(201, 162, 39, 0.2), rgba(201, 162, 39, 0.1));
+            border: 2px solid rgba(201, 162, 39, 0.5);
+        }
+
+        .action-btn.super:hover {
+            box-shadow: 0 0 30px var(--glow-gold);
+        }
+
+        .action-btn.super svg {
+            width: 24px;
+            height: 24px;
+            color: var(--gold-bright);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 16px;
+            padding-bottom: max(10px, env(safe-area-inset-bottom));
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--glass-border);
+            position: relative;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--velvet-pink), var(--gold-main));
+            border-radius: 1px;
+            transition: width 0.3s ease;
+        }
+
+        .nav-item:hover {
+            color: var(--velvet-light);
+            background: rgba(107, 45, 74, 0.1);
+        }
+
+        .nav-item.active {
+            color: var(--velvet-pink);
+        }
+
+        .nav-item.active::before {
+            width: 24px;
+        }
+
+        .nav-item svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .nav-label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-badge {
+            position: absolute;
+            top: 4px;
+            right: 12px;
+            min-width: 16px;
+            height: 16px;
+            padding: 0 4px;
+            background: linear-gradient(135deg, var(--velvet-pink), var(--velvet-rose));
+            border-radius: 8px;
+            font-size: 0.6rem;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Match Overlay */
+        .match-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 6, 8, 0.97);
+            backdrop-filter: blur(30px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .match-overlay.show {
+            display: flex;
+        }
+
+        .match-particles {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .match-particle {
+            position: absolute;
+            font-size: 24px;
+            opacity: 0;
+        }
+
+        .match-content {
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .match-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg, var(--velvet-rose), var(--velvet-pink), var(--gold-main));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 60px var(--glow-pink), 0 0 100px var(--glow-gold);
+        }
+
+        .match-icon svg {
+            width: 50px;
+            height: 50px;
+            color: white;
+        }
+
+        .match-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 500;
+            background: linear-gradient(135deg, var(--velvet-pink), var(--gold-bright), var(--velvet-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .match-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 32px;
+        }
+
+        .match-photos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 36px;
+            position: relative;
+        }
+
+        .match-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--velvet-plum);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .match-photo:first-child {
+            transform: translateX(20px);
+            z-index: 1;
+        }
+
+        .match-photo:last-child {
+            transform: translateX(-20px);
+        }
+
+        .match-heart {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--velvet-rose), var(--velvet-pink));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            box-shadow: 0 0 20px var(--glow-pink);
+        }
+
+        .match-heart svg {
+            width: 24px;
+            height: 24px;
+            color: white;
+        }
+
+        .match-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .match-btn {
+            padding: 16px 48px;
+            border-radius: 30px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .match-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .match-btn.primary {
+            background: linear-gradient(135deg, var(--velvet-rose), var(--velvet-pink));
+            color: white;
+            box-shadow: 0 10px 30px var(--glow-pink);
+        }
+
+        .match-btn.secondary {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            color: var(--velvet-light);
+        }
+
+        /* Profile Page */
+        .profile-page {
+            padding-bottom: 100px;
+        }
+
+        .profile-hero {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .profile-hero-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, var(--velvet-black) 0%, rgba(10, 6, 8, 0.3) 50%, transparent 100%);
+        }
+
+        .profile-back-btn {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            width: 44px;
+            height: 44px;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .profile-back-btn:hover {
+            background: var(--glass-light);
+            transform: scale(1.05);
+        }
+
+        .profile-back-btn svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .profile-hero-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 24px;
+            z-index: 5;
+        }
+
+        .profile-badges-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .profile-badge {
+            padding: 6px 12px;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .profile-badge.verified {
+            color: var(--gold-bright);
+            border: 1px solid rgba(201, 162, 39, 0.3);
+        }
+
+        .profile-badge.online {
+            color: var(--green-bright);
+            border: 1px solid rgba(74, 222, 128, 0.3);
+        }
+
+        .profile-badge.online::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--green-bright);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        .profile-name-row {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+
+        .profile-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 500;
+            color: white;
+        }
+
+        .profile-age {
+            font-size: 1.4rem;
+            color: var(--velvet-light);
+            font-weight: 300;
+        }
+
+        .profile-location {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .profile-location svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .profile-body {
+            padding: 0 20px;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 12px;
+            margin: -30px 0 24px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .profile-action-btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: 14px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .profile-action-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .profile-action-btn.primary {
+            background: linear-gradient(135deg, var(--velvet-rose), var(--velvet-wine));
+            color: white;
+            box-shadow: 0 8px 25px var(--glow-pink);
+        }
+
+        .profile-action-btn.secondary {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+        }
+
+        .profile-action-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .profile-section {
+            margin-bottom: 24px;
+        }
+
+        .profile-section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .profile-bio {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .prefs-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .pref-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            padding: 14px;
+        }
+
+        .pref-icon {
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+        }
+
+        .pref-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .pref-value {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .tags-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .profile-tag {
+            padding: 8px 14px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .profile-tag.green {
+            background: linear-gradient(135deg, rgba(45, 122, 74, 0.2), rgba(45, 122, 74, 0.1));
+            border-color: rgba(74, 222, 128, 0.3);
+            color: var(--green-bright);
+        }
+
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .gallery-photo {
+            aspect-ratio: 1;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-photo:hover {
+            transform: scale(1.03);
+        }
+
+        .gallery-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Placeholder */
+        .placeholder-bg {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--velvet-plum), var(--velvet-wine));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 380px) {
+            .hero-logo {
+                width: 150px;
+            }
+            .card-name {
+                font-size: 1.5rem;
+            }
+            .action-btn.like {
+                width: 60px;
+                height: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Velvet Atmosphere -->
+    <div class="velvet-atmosphere">
+        <div class="ambient-glow pink-1"></div>
+        <div class="ambient-glow pink-2"></div>
+        <div class="ambient-glow gold"></div>
+        <div class="ambient-glow green"></div>
+        <div class="smoke-container" id="smokeContainer"></div>
+        <div class="ember-container" id="emberContainer"></div>
+    </div>
+    <div class="noise-overlay"></div>
+    <div class="vignette"></div>
+
+    <div class="app-container">
+        <!-- Hero Logo -->
+        <div class="hero-logo-section">
+            <img src="https://i.ibb.co/RG4pbyLj/logo.png" alt="StonelyFans" class="hero-logo">
+            <p class="tagline">Where Good Vibes Meet Good Times</p>
+        </div>
+
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <div class="online-count">
+                    <span class="online-dot"></span>
+                    <span>4,269 Online</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="icon-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                    </svg>
+                </button>
+                <button class="icon-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                    </svg>
+                    <span class="notification-badge"></span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Page Container -->
+        <div class="page-container">
+            <!-- Discover Page -->
+            <div class="page active" id="discoverPage">
+                <!-- Live Now -->
+                <div class="live-section">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <span class="live-badge">Live</span>
+                            Streaming Now
+                        </h2>
+                        <span class="section-action">See All</span>
+                    </div>
+                    <div class="live-scroll">
+                        <div class="live-card" onclick="openProfile('jasmine')">
+                            <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=300&h=400&fit=crop" alt="Live">
+                            <div class="live-card-overlay"></div>
+                            <div class="live-card-top">
+                                <span class="live-indicator">LIVE</span>
+                                <span class="viewer-count">
+                                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5z"/></svg>
+                                    1.2k
+                                </span>
+                            </div>
+                            <div class="live-card-bottom">
+                                <div class="live-card-name">Jasmine</div>
+                                <div class="live-card-tag">Chill Sesh 💨</div>
+                            </div>
+                        </div>
+                        <div class="live-card" onclick="openProfile('luna')">
+                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&h=400&fit=crop" alt="Live">
+                            <div class="live-card-overlay"></div>
+                            <div class="live-card-top">
+                                <span class="live-indicator">LIVE</span>
+                                <span class="viewer-count">
+                                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5z"/></svg>
+                                    892
+                                </span>
+                            </div>
+                            <div class="live-card-bottom">
+                                <div class="live-card-name">Luna</div>
+                                <div class="live-card-tag">420 Vibes 🌿</div>
+                            </div>
+                        </div>
+                        <div class="live-card" onclick="openProfile('sage')">
+                            <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=300&h=400&fit=crop" alt="Live">
+                            <div class="live-card-overlay"></div>
+                            <div class="live-card-top">
+                                <span class="live-indicator">LIVE</span>
+                                <span class="viewer-count">
+                                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5z"/></svg>
+                                    654
+                                </span>
+                            </div>
+                            <div class="live-card-bottom">
+                                <div class="live-card-name">Sage</div>
+                                <div class="live-card-tag">Night Owl 🌙</div>
+                            </div>
+                        </div>
+                        <div class="live-card" onclick="openProfile('willow')">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&h=400&fit=crop" alt="Live">
+                            <div class="live-card-overlay"></div>
+                            <div class="live-card-top">
+                                <span class="live-indicator">LIVE</span>
+                                <span class="viewer-count">
+                                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5z"/></svg>
+                                    1.5k
+                                </span>
+                            </div>
+                            <div class="live-card-bottom">
+                                <div class="live-card-name">Willow</div>
+                                <div class="live-card-tag">Edibles Hour 🍪</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Featured Creators -->
+                <div class="featured-section">
+                    <div class="section-header">
+                        <h2 class="section-title">🔥 Hot Creators</h2>
+                        <span class="section-action">More</span>
+                    </div>
+                    <div class="featured-grid">
+                        <div class="featured-card large" onclick="openProfile('aurora')">
+                            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&h=500&fit=crop" alt="Featured">
+                            <div class="featured-overlay"></div>
+                            <div class="featured-content">
+                                <div class="featured-badges">
+                                    <span class="badge gold">⭐ Top Creator</span>
+                                    <span class="badge green">🍃 420 Friendly</span>
+                                    <span class="badge online">Online</span>
+                                </div>
+                                <div class="featured-name">Aurora, 25</div>
+                                <div class="featured-info">
+                                    <span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg> 4 mi</span>
+                                    <span>Hollywood</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="featured-card" onclick="openProfile('ivy')">
+                            <img src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=400&h=500&fit=crop" alt="Featured">
+                            <div class="featured-overlay"></div>
+                            <div class="featured-content">
+                                <div class="featured-badges">
+                                    <span class="badge online">Online</span>
+                                </div>
+                                <div class="featured-name">Ivy, 27</div>
+                                <div class="featured-info">6 mi • Santa Monica</div>
+                            </div>
+                        </div>
+                        <div class="featured-card" onclick="openProfile('rose')">
+                            <img src="https://images.unsplash.com/photo-1488716820149-c2a792ee3e67?w=400&h=500&fit=crop" alt="Featured">
+                            <div class="featured-overlay"></div>
+                            <div class="featured-content">
+                                <div class="featured-badges">
+                                    <span class="badge pink">💨 Daily</span>
+                                </div>
+                                <div class="featured-name">Rose, 24</div>
+                                <div class="featured-info">2 mi • Arts District</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Swipe Page -->
+            <div class="page" id="swipePage">
+                <div class="swipe-section">
+                    <div class="card-stack">
+                        <div class="profile-card behind-2">
+                            <div class="card-image-container">
+                                <div class="placeholder-bg">🌿</div>
+                            </div>
+                        </div>
+                        <div class="profile-card behind-1">
+                            <div class="card-image-container">
+                                <div class="placeholder-bg">💨</div>
+                            </div>
+                        </div>
+                        <div class="profile-card front" id="currentCard">
+                            <div class="card-image-container">
+                                <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600&h=800&fit=crop" alt="Profile" class="card-image">
+                                <div class="card-gradient"></div>
+                                <div class="card-top-badges">
+                                    <span class="card-badge verified">
+                                        <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        Verified
+                                    </span>
+                                    <span class="card-badge online">Online</span>
+                                </div>
+                                <div class="card-content">
+                                    <div class="card-header">
+                                        <span class="card-name">Jasmine</span>
+                                        <span class="card-age">24</span>
+                                    </div>
+                                    <div class="card-location">
+                                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
+                                        2 miles away • Los Angeles
+                                    </div>
+                                    <div class="card-tags">
+                                        <span class="card-tag primary">🍃 420 Friendly</span>
+                                        <span class="card-tag">🌙 Night Owl</span>
+                                        <span class="card-tag">💋 Flirty</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swipe-indicator swipe-like" id="likeIndicator">VIBE ✨</div>
+                            <div class="swipe-indicator swipe-nope" id="nopeIndicator">PASS</div>
+                            <div class="swipe-indicator swipe-super" id="superIndicator">💜 OBSESSED</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-bar">
+                    <button class="action-btn small rewind" onclick="rewind()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                            <path d="M3 3v5h5"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn nope" onclick="swipeLeft()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                            <path d="M18 6L6 18M6 6l12 12"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn like" onclick="swipeRight()">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn super" onclick="superLike()">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn small boost" onclick="boost()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Profile Page -->
+            <div class="page profile-page" id="profilePage">
+                <div class="profile-hero">
+                    <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800&h=800&fit=crop" class="profile-hero-image" id="profileHeroImage">
+                    <div class="profile-hero-overlay"></div>
+                    <button class="profile-back-btn" onclick="goBack()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <div class="profile-hero-content">
+                        <div class="profile-badges-row">
+                            <span class="profile-badge verified">
+                                <svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                Verified Creator
+                            </span>
+                            <span class="profile-badge online">Online Now</span>
+                        </div>
+                        <div class="profile-name-row">
+                            <span class="profile-name" id="profileName">Jasmine</span>
+                            <span class="profile-age" id="profileAge">24</span>
+                        </div>
+                        <div class="profile-location" id="profileLocation">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
+                            2 miles away • Los Angeles
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-body">
+                    <div class="profile-actions">
+                        <button class="profile-action-btn primary">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                            Like
+                        </button>
+                        <button class="profile-action-btn secondary">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                            Message
+                        </button>
+                    </div>
+
+                    <div class="profile-section">
+                        <h3 class="profile-section-title">💋 About Me</h3>
+                        <p class="profile-bio" id="profileBio">Looking for someone to share good vibes and even better strains with. I'm into late nights, deep conversations, and finding that perfect high together. Let's roll one and see where the night takes us... 💨✨</p>
+                    </div>
+
+                    <div class="profile-section">
+                        <h3 class="profile-section-title">🍃 Smoking Style</h3>
+                        <div class="prefs-grid">
+                            <div class="pref-card">
+                                <div class="pref-icon">🌿</div>
+                                <div class="pref-label">Strain</div>
+                                <div class="pref-value" id="prefStrain">Sativa</div>
+                            </div>
+                            <div class="pref-card">
+                                <div class="pref-icon">💨</div>
+                                <div class="pref-label">Method</div>
+                                <div class="pref-value" id="prefMethod">Joints & Bongs</div>
+                            </div>
+                            <div class="pref-card">
+                                <div class="pref-icon">📅</div>
+                                <div class="pref-label">Frequency</div>
+                                <div class="pref-value" id="prefFrequency">Daily</div>
+                            </div>
+                            <div class="pref-card">
+                                <div class="pref-icon">🔥</div>
+                                <div class="pref-label">Tolerance</div>
+                                <div class="pref-value" id="prefTolerance">High</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="profile-section">
+                        <h3 class="profile-section-title">⭐ Favorite Strains</h3>
+                        <div class="tags-wrap" id="favoriteStrains">
+                            <span class="profile-tag green">🍋 Lemon Haze</span>
+                            <span class="profile-tag green">🍇 Purple Kush</span>
+                            <span class="profile-tag green">🍪 GSC</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-section">
+                        <h3 class="profile-section-title">💫 Interests</h3>
+                        <div class="tags-wrap" id="interestTags">
+                            <span class="profile-tag">🎵 Live Music</span>
+                            <span class="profile-tag">🌙 Night Owl</span>
+                            <span class="profile-tag">🎨 Art</span>
+                            <span class="profile-tag">💋 Flirty</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-section">
+                        <h3 class="profile-section-title">📸 Gallery</h3>
+                        <div class="photo-gallery" id="photoGallery">
+                            <div class="gallery-photo"><img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=300&h=300&fit=crop" alt="Photo"></div>
+                            <div class="gallery-photo"><img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&h=300&fit=crop" alt="Photo"></div>
+                            <div class="gallery-photo"><img src="https://images.unsplash.com/photo-1496440737103-cd596325d314?w=300&h=300&fit=crop" alt="Photo"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <div class="nav-item active" data-page="discover" onclick="switchPage('discover')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+                </svg>
+                <span class="nav-label">Discover</span>
+            </div>
+            <div class="nav-item" data-page="swipe" onclick="switchPage('swipe')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+                <span class="nav-label">Match</span>
+                <span class="nav-badge">5</span>
+            </div>
+            <div class="nav-item" onclick="alert('Chat coming soon! 💬')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>
+                <span class="nav-label">Chat</span>
+                <span class="nav-badge">12</span>
+            </div>
+            <div class="nav-item" onclick="alert('Profile coming soon! 👤')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                </svg>
+                <span class="nav-label">Profile</span>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Match Overlay -->
+    <div class="match-overlay" id="matchOverlay">
+        <div class="match-particles" id="matchParticles"></div>
+        <div class="match-content">
+            <div class="match-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+            </div>
+            <h2 class="match-title">It's a Vibe! 💨</h2>
+            <p class="match-subtitle">You and <span id="matchName">Jasmine</span> are ready to connect</p>
+            <div class="match-photos">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop" alt="You" class="match-photo">
+                <div class="match-heart">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                </div>
+                <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=200&h=200&fit=crop" alt="Match" class="match-photo" id="matchPhoto">
+            </div>
+            <div class="match-actions">
+                <button class="match-btn primary" onclick="closeMatch()">Send Message 💬</button>
+                <button class="match-btn secondary" onclick="closeMatch()">Keep Vibing</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Profile Data
+        const profiles = {
+            jasmine: {
+                name: "Jasmine", age: 24, location: "2 miles away • Los Angeles",
+                image: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600&h=800&fit=crop",
+                heroImage: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800&h=800&fit=crop",
+                tags: ["🍃 420 Friendly", "🌙 Night Owl", "💋 Flirty"],
+                online: true, verified: true,
+                bio: "Looking for someone to share good vibes and even better strains with. I'm into late nights, deep conversations, and finding that perfect high together. Let's roll one and see where the night takes us... 💨✨",
+                strain: "Sativa", method: "Joints & Bongs", frequency: "Daily", tolerance: "High",
+                favoriteStrains: ["🍋 Lemon Haze", "🍇 Purple Kush", "🍪 GSC"],
+                interests: ["🎵 Live Music", "🌙 Night Owl", "🎨 Art", "💋 Flirty"],
+                photos: ["https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=300&h=300&fit=crop", "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&h=300&fit=crop", "https://images.unsplash.com/photo-1496440737103-cd596325d314?w=300&h=300&fit=crop"]
+            },
+            luna: {
+                name: "Luna", age: 26, location: "3 miles away • Venice Beach",
+                image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&h=800&fit=crop",
+                heroImage: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800&h=800&fit=crop",
+                tags: ["🍃 Daily Toker", "🎨 Artist", "🧘 Yoga"],
+                online: true, verified: true,
+                bio: "Artist by day, stoner by night 🎨 Love painting while elevated and getting lost in creative flow. Looking for my muse... are you it? 💜",
+                strain: "Hybrid", method: "Vape Pen", frequency: "Daily", tolerance: "High",
+                favoriteStrains: ["🌈 Zkittlez", "🍊 Mimosa", "🎨 Gelato"],
+                interests: ["🎨 Art", "🧘 Yoga", "🌅 Sunsets", "📚 Philosophy"],
+                photos: ["https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&h=300&fit=crop"]
+            },
+            sage: {
+                name: "Sage", age: 23, location: "5 miles away • Silver Lake",
+                image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&h=800&fit=crop",
+                heroImage: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&h=800&fit=crop",
+                tags: ["🌿 Sativa", "🎸 Musician", "🌅 Sunsets"],
+                online: false, verified: true,
+                bio: "Musician vibes only 🎸 I write my best songs when I'm properly elevated. Come be my inspiration... 🎵",
+                strain: "Sativa", method: "Joints", frequency: "Weekends", tolerance: "Medium",
+                favoriteStrains: ["⚡ Green Crack", "🍋 Super Lemon Haze"],
+                interests: ["🎸 Guitar", "🎤 Singing", "🌅 Sunsets"],
+                photos: ["https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=300&h=300&fit=crop"]
+            },
+            willow: {
+                name: "Willow", age: 28, location: "1 mile away • Echo Park",
+                image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&h=800&fit=crop",
+                heroImage: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&h=800&fit=crop",
+                tags: ["💨 Edibles", "📚 Reader", "🍷 Wine & Weed"],
+                online: true, verified: false,
+                bio: "Edibles connoisseur 🍪 Love a good book, a glass of wine, and a strong edible. Looking for someone to get cozy with... 🔥",
+                strain: "Indica", method: "Edibles", frequency: "Daily", tolerance: "Very High",
+                favoriteStrains: ["🍇 Granddaddy Purple", "🫐 Blueberry"],
+                interests: ["📚 Reading", "🍷 Wine", "🍳 Cooking"],
+                photos: ["https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&h=300&fit=crop"]
+            },
+            aurora: {
+                name: "Aurora", age: 25, location: "4 miles away • Hollywood",
+                image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&h=800&fit=crop",
+                heroImage: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&h=800&fit=crop",
+                tags: ["🍃 420", "🎬 Films", "🌙 Night Sessions"],
+                online: true, verified: true,
+                bio: "Film buff and night owl 🎬 Nothing beats watching a classic movie while properly elevated. Netflix and... you know 😏",
+                strain: "Hybrid", method: "Bong & Dabs", frequency: "Daily", tolerance: "High",
+                favoriteStrains: ["🎬 Wedding Cake", "🍯 Honey Bun"],
+                interests: ["🎬 Films", "🌙 Night Owl", "🎮 Gaming"],
+                photos: ["https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&h=300&fit=crop"]
+            },
+            ivy: {
+                name: "Ivy", age: 27, location: "6 miles away • Santa Monica",
+                image: "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=600&h=800&fit=crop",
+                heroImage: "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=800&h=800&fit=crop",
+                tags: ["🎵 Live Music", "🏄 Beach", "🌿 Organic"],
+                online: false, verified: true,
+                bio: "Beach babe & music lover 🏄‍♀️ Catch me at concerts or on the beach with a joint. Life's better elevated 🌊",
+                strain: "Sativa", method: "Organic Joints", frequency: "Social", tolerance: "Medium",
+                favoriteStrains: ["🌊 Maui Wowie", "🏝️ Pineapple Express"],
+                interests: ["🎵 Concerts", "🏄 Surfing", "🏖️ Beach"],
+                photos: ["https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=300&h=300&fit=crop"]
+            },
+            rose: {
+                name: "Rose", age: 24, location: "2 miles away • Arts District",
+                image: "https://images.unsplash.com/photo-1488716820149-c2a792ee3e67?w=600&h=800&fit=crop",
+                heroImage: "https://images.unsplash.com/photo-1488716820149-c2a792ee3e67?w=800&h=800&fit=crop",
+                tags: ["🌿 Sativa", "🎨 Creative", "☕ Coffee"],
+                online: true, verified: false,
+                bio: "Creative soul who runs on coffee and sativa 🌿 Looking for someone to explore art galleries and smoke spots with 💕",
+                strain: "Sativa", method: "Vape & Joints", frequency: "Daily", tolerance: "Medium",
+                favoriteStrains: ["☕ Cafe Racer", "🍋 Lemon Tree"],
+                interests: ["🎨 Design", "☕ Coffee", "🖼️ Galleries"],
+                photos: ["https://images.unsplash.com/photo-1488716820149-c2a792ee3e67?w=300&h=300&fit=crop"]
+            }
+        };
+
+        const profileOrder = ['jasmine', 'luna', 'sage', 'willow', 'aurora', 'ivy', 'rose'];
+        let currentProfileIndex = 0;
+        let currentPage = 'discover';
+        let previousPage = 'discover';
+
+        // Smoke particles
+        function createSmokeParticles() {
+            const container = document.getElementById('smokeContainer');
+            for (let i = 0; i < 5; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'smoke-particle';
+                particle.style.width = particle.style.height = `${100 + Math.random() * 150}px`;
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.bottom = '-100px';
+                container.appendChild(particle);
+                animateSmoke(particle);
+            }
+        }
+
+        function animateSmoke(particle) {
+            anime({
+                targets: particle,
+                translateY: [0, -window.innerHeight - 200],
+                translateX: [(Math.random() - 0.5) * 100],
+                scale: [0.5, 1.5],
+                opacity: [0, 0.4, 0],
+                easing: 'easeOutQuad',
+                duration: 15000 + Math.random() * 10000,
+                complete: () => {
+                    particle.style.left = `${Math.random() * 100}%`;
+                    animateSmoke(particle);
+                }
+            });
+        }
+
+        // Ember particles
+        function createEmbers() {
+            const container = document.getElementById('emberContainer');
+            for (let i = 0; i < 8; i++) {
+                const ember = document.createElement('div');
+                ember.className = 'ember';
+                ember.style.left = `${10 + Math.random() * 80}%`;
+                ember.style.bottom = '5%';
+                container.appendChild(ember);
+                animateEmber(ember, i * 500);
+            }
+        }
+
+        function animateEmber(ember, delay) {
+            anime({
+                targets: ember,
+                translateY: [0, -(150 + Math.random() * 200)],
+                translateX: [(Math.random() - 0.5) * 50],
+                opacity: [0, 1, 1, 0],
+                scale: [0, 1, 0.5],
+                easing: 'easeOutQuad',
+                duration: 3000 + Math.random() * 2000,
+                delay: delay,
+                complete: () => {
+                    ember.style.left = `${10 + Math.random() * 80}%`;
+                    animateEmber(ember, Math.random() * 1500);
+                }
+            });
+        }
+
+        // Ambient light animation
+        function animateAmbient() {
+            anime({
+                targets: '.ambient-glow',
+                opacity: [0.4, 0.6, 0.4],
+                scale: [1, 1.1, 1],
+                easing: 'easeInOutSine',
+                duration: 8000,
+                loop: true,
+                delay: anime.stagger(2000)
+            });
+        }
+
+        // Card swiping
+        const card = document.getElementById('currentCard');
+        const likeIndicator = document.getElementById('likeIndicator');
+        const nopeIndicator = document.getElementById('nopeIndicator');
+        const superIndicator = document.getElementById('superIndicator');
+        let startX = 0, startY = 0, currentX = 0, currentY = 0, isDragging = false;
+
+        card.addEventListener('mousedown', startDrag);
+        card.addEventListener('touchstart', startDrag, { passive: true });
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('touchmove', drag, { passive: true });
+        document.addEventListener('mouseup', endDrag);
+        document.addEventListener('touchend', endDrag);
+
+        function startDrag(e) {
+            isDragging = true;
+            startX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+            startY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
+            card.style.transition = 'none';
+        }
+
+        function drag(e) {
+            if (!isDragging) return;
+            currentX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+            currentY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+            const diffX = currentX - startX;
+            const diffY = currentY - startY;
+            card.style.transform = `translateX(${diffX}px) translateY(${diffY * 0.3}px) rotate(${diffX * 0.08}deg)`;
+
+            if (diffX > 60) {
+                likeIndicator.style.opacity = Math.min((diffX - 60) / 80, 1);
+                nopeIndicator.style.opacity = 0;
+                superIndicator.style.opacity = 0;
+            } else if (diffX < -60) {
+                nopeIndicator.style.opacity = Math.min((-diffX - 60) / 80, 1);
+                likeIndicator.style.opacity = 0;
+                superIndicator.style.opacity = 0;
+            } else if (diffY < -80) {
+                superIndicator.style.opacity = Math.min((-diffY - 80) / 80, 1);
+                likeIndicator.style.opacity = 0;
+                nopeIndicator.style.opacity = 0;
+            } else {
+                likeIndicator.style.opacity = 0;
+                nopeIndicator.style.opacity = 0;
+                superIndicator.style.opacity = 0;
+            }
+        }
+
+        function endDrag() {
+            if (!isDragging) return;
+            isDragging = false;
+            const diffX = currentX - startX;
+            const diffY = currentY - startY;
+            card.style.transition = 'transform 0.4s cubic-bezier(0.22, 1, 0.36, 1)';
+
+            if (diffX > 100) {
+                swipeRight();
+            } else if (diffX < -100) {
+                swipeLeft();
+            } else if (diffY < -120) {
+                superLike();
+            } else {
+                card.style.transform = '';
+                likeIndicator.style.opacity = 0;
+                nopeIndicator.style.opacity = 0;
+                superIndicator.style.opacity = 0;
+            }
+        }
+
+        function swipeRight() {
+            anime({
+                targets: card,
+                translateX: '150%',
+                rotate: 25,
+                opacity: 0,
+                duration: 400,
+                easing: 'easeOutQuad',
+                complete: () => {
+                    if (Math.random() > 0.4) showMatch();
+                    loadNextProfile();
+                }
+            });
+            likeIndicator.style.opacity = 1;
+        }
+
+        function swipeLeft() {
+            anime({
+                targets: card,
+                translateX: '-150%',
+                rotate: -25,
+                opacity: 0,
+                duration: 400,
+                easing: 'easeOutQuad',
+                complete: loadNextProfile
+            });
+            nopeIndicator.style.opacity = 1;
+        }
+
+        function superLike() {
+            anime({
+                targets: card,
+                translateY: '-150%',
+                scale: 0.5,
+                opacity: 0,
+                duration: 400,
+                easing: 'easeOutQuad',
+                complete: () => {
+                    showMatch();
+                    loadNextProfile();
+                }
+            });
+            superIndicator.style.opacity = 1;
+        }
+
+        function rewind() {
+            currentProfileIndex = (currentProfileIndex - 1 + profileOrder.length) % profileOrder.length;
+            loadNextProfile();
+        }
+
+        function boost() {
+            anime({
+                targets: card,
+                scale: [1, 1.05, 1],
+                boxShadow: ['0 25px 60px rgba(0,0,0,0.5)', '0 25px 80px rgba(184,90,122,0.6)', '0 25px 60px rgba(0,0,0,0.5)'],
+                duration: 800,
+                easing: 'easeInOutQuad'
+            });
+        }
+
+        function loadNextProfile() {
+            currentProfileIndex = (currentProfileIndex + 1) % profileOrder.length;
+            const p = profiles[profileOrder[currentProfileIndex]];
+
+            card.style.transition = 'none';
+            card.style.transform = '';
+            card.style.opacity = '1';
+
+            card.querySelector('.card-image').src = p.image;
+            card.querySelector('.card-name').textContent = p.name;
+            card.querySelector('.card-age').textContent = p.age;
+            card.querySelector('.card-location').innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>${p.location}`;
+            card.querySelector('.card-tags').innerHTML = p.tags.map((t, i) => `<span class="card-tag ${i === 0 ? 'primary' : ''}">${t}</span>`).join('');
+            card.querySelector('.card-badge.online').style.display = p.online ? 'flex' : 'none';
+            card.querySelector('.card-badge.verified').style.display = p.verified ? 'flex' : 'none';
+
+            likeIndicator.style.opacity = 0;
+            nopeIndicator.style.opacity = 0;
+            superIndicator.style.opacity = 0;
+
+            anime({
+                targets: card,
+                scale: [0.9, 1],
+                opacity: [0, 1],
+                duration: 300,
+                easing: 'easeOutQuad'
+            });
+        }
+
+        // Profile viewing
+        function openProfile(key) {
+            const p = profiles[key];
+            if (!p) return;
+
+            document.getElementById('profileHeroImage').src = p.heroImage;
+            document.getElementById('profileName').textContent = p.name;
+            document.getElementById('profileAge').textContent = p.age;
+            document.getElementById('profileLocation').innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>${p.location}`;
+            document.getElementById('profileBio').textContent = p.bio;
+            document.getElementById('prefStrain').textContent = p.strain;
+            document.getElementById('prefMethod').textContent = p.method;
+            document.getElementById('prefFrequency').textContent = p.frequency;
+            document.getElementById('prefTolerance').textContent = p.tolerance;
+            document.getElementById('favoriteStrains').innerHTML = p.favoriteStrains.map(s => `<span class="profile-tag green">${s}</span>`).join('');
+            document.getElementById('interestTags').innerHTML = p.interests.map(i => `<span class="profile-tag">${i}</span>`).join('');
+            document.getElementById('photoGallery').innerHTML = p.photos.map(ph => `<div class="gallery-photo"><img src="${ph}" alt="Photo"></div>`).join('');
+
+            switchPage('profile');
+        }
+
+        // Page navigation
+        function switchPage(pageName) {
+            previousPage = currentPage;
+            currentPage = pageName;
+
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+            const page = document.getElementById(pageName + 'Page');
+            if (page) {
+                page.classList.add('active');
+                page.scrollTop = 0;
+            }
+
+            const navItem = document.querySelector(`[data-page="${pageName}"]`);
+            if (navItem) navItem.classList.add('active');
+        }
+
+        function goBack() {
+            switchPage(previousPage);
+        }
+
+        // Match overlay
+        function showMatch() {
+            const p = profiles[profileOrder[currentProfileIndex]];
+            document.getElementById('matchName').textContent = p.name;
+            document.getElementById('matchPhoto').src = p.heroImage;
+            document.getElementById('matchOverlay').classList.add('show');
+            createMatchParticles();
+
+            anime({
+                targets: '.match-icon',
+                scale: [0.5, 1.1, 1],
+                opacity: [0, 1],
+                duration: 800,
+                easing: 'easeOutElastic(1, 0.5)',
+                delay: 200
+            });
+        }
+
+        function createMatchParticles() {
+            const container = document.getElementById('matchParticles');
+            container.innerHTML = '';
+            const emojis = ['💨', '🍃', '🌿', '✨', '💜', '💋', '🔥', '💕'];
+
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'match-particle';
+                particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = '-30px';
+                container.appendChild(particle);
+
+                anime({
+                    targets: particle,
+                    translateY: window.innerHeight + 50,
+                    translateX: (Math.random() - 0.5) * 200,
+                    rotate: 360 * (Math.random() > 0.5 ? 1 : -1),
+                    opacity: [0, 1, 1, 0],
+                    duration: 3000 + Math.random() * 2000,
+                    delay: i * 80,
+                    easing: 'easeOutQuad'
+                });
+            }
+        }
+
+        function closeMatch() {
+            anime({
+                targets: document.getElementById('matchOverlay'),
+                opacity: [1, 0],
+                duration: 300,
+                easing: 'easeOutQuad',
+                complete: () => document.getElementById('matchOverlay').classList.remove('show')
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createSmokeParticles();
+            createEmbers();
+            animateAmbient();
+
+            anime({
+                targets: '.live-card',
+                opacity: [0, 1],
+                translateY: [20, 0],
+                duration: 500,
+                delay: anime.stagger(100, { start: 300 }),
+                easing: 'easeOutQuad'
+            });
+
+            anime({
+                targets: '.featured-card',
+                opacity: [0, 1],
+                translateY: [30, 0],
+                duration: 600,
+                delay: anime.stagger(100, { start: 500 }),
+                easing: 'easeOutQuad'
+            });
+        });
+    </script>
+</body>
+</html>

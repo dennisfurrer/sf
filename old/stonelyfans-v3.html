@@ -1,0 +1,267 @@
+L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>
+                    <button class="action-btn small" onclick="openCurrentProfile()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
+                </div>
+            </div>
+
+            <div class="page profile-page" id="profilePage">
+                <div class="profile-hero">
+                    <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800&h=800&fit=crop" alt="Profile" class="profile-hero-image" id="profileHeroImage">
+                    <div class="profile-hero-overlay"></div>
+                    <button class="profile-back-btn" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+                    <div class="profile-actions-top"><button class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></div>
+                    <div class="profile-hero-content">
+                        <div class="profile-badges-row"><span class="profile-badge verified"><svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Verified</span><span class="profile-badge online">Online now</span></div>
+                        <div class="profile-name-row"><span class="profile-name" id="profileName">Jasmine</span><span class="profile-age" id="profileAge">24</span></div>
+                        <div class="profile-location" id="profileLocation"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>2 miles away • Los Angeles</div>
+                    </div>
+                </div>
+                <div class="profile-body">
+                    <div class="profile-main-actions">
+                        <button class="profile-action-btn primary"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Like</button>
+                        <button class="profile-action-btn secondary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Message</button>
+                    </div>
+                    <div class="profile-section"><h3 class="profile-section-title"><span class="icon">💫</span> About Me</h3><p class="profile-bio" id="profileBio">Looking for someone to share good vibes and even better strains with. I'm into chill nights, creative conversations, and finding that perfect balance between relaxation and adventure. Let's roll one and see where the night takes us ✨</p></div>
+                    <div class="profile-section">
+                        <h3 class="profile-section-title"><span class="icon">🍃</span> Smoking Preferences</h3>
+                        <div class="smoking-prefs">
+                            <div class="smoking-pref-card"><div class="pref-icon">🌿</div><div class="pref-label">Preferred Strain</div><div class="pref-value" id="prefStrain">Sativa</div></div>
+                            <div class="smoking-pref-card"><div class="pref-icon">💨</div><div class="pref-label">Method</div><div class="pref-value" id="prefMethod">Joints & Bongs</div></div>
+                            <div class="smoking-pref-card"><div class="pref-icon">📅</div><div class="pref-label">Frequency</div><div class="pref-value" id="prefFrequency">Daily</div></div>
+                            <div class="smoking-pref-card"><div class="pref-icon">🎯</div><div class="pref-label">Tolerance</div><div class="pref-value" id="prefTolerance">High</div></div>
+                        </div>
+                    </div>
+                    <div class="profile-section"><h3 class="profile-section-title"><span class="icon">⭐</span> Favorite Strains</h3><div class="strain-tags" id="favoriteStrains"><span class="strain-tag">🍋 Lemon Haze</span><span class="strain-tag">🍇 Purple Kush</span><span class="strain-tag">🍪 Girl Scout Cookies</span><span class="strain-tag">🧀 Blue Cheese</span></div></div>
+                    <div class="profile-section"><h3 class="profile-section-title"><span class="icon">🎵</span> Interests</h3><div class="interest-tags" id="interestTags"><span class="interest-tag">🎵 Live Music</span><span class="interest-tag">🌙 Night Owl</span><span class="interest-tag">🎨 Art</span><span class="interest-tag">🧘 Yoga</span><span class="interest-tag">🎬 Movies</span><span class="interest-tag">🍜 Foodie</span></div></div>
+                    <div class="profile-section">
+                        <h3 class="profile-section-title"><span class="icon">📸</span> Photos</h3>
+                        <div class="photo-gallery" id="photoGallery">
+                            <div class="gallery-photo"><img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=300&h=300&fit=crop" alt="Photo"></div>
+                            <div class="gallery-photo"><img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&h=300&fit=crop" alt="Photo"></div>
+                            <div class="gallery-photo"><img src="https://images.unsplash.com/photo-1496440737103-cd596325d314?w=300&h=300&fit=crop" alt="Photo"></div>
+                        </div>
+                    </div>
+                    <div class="profile-section"><h3 class="profile-section-title"><span class="icon">🕐</span> Session Availability</h3><div class="session-card"><div class="session-icon">🌙</div><div class="session-info"><div class="session-title">Best Time to Sesh</div><div class="session-subtitle">Usually free for evening sessions</div></div><div class="session-time"><div class="session-day">Most days</div><div class="session-hours">After 7 PM</div></div></div></div>
+                </div>
+            </div>
+
+            <div class="page profile-page" id="myprofilePage">
+                <div class="profile-hero">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=800&fit=crop" alt="My Profile" class="profile-hero-image">
+                    <div class="profile-hero-overlay"></div>
+                    <button class="profile-back-btn" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+                    <div class="profile-hero-content">
+                        <div class="profile-badges-row"><span class="profile-badge verified"><svg viewBox="0 0 24 24" fill="currentColor" width="12" height="12"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Verified</span><span class="profile-badge online">Online</span></div>
+                        <div class="profile-name-row"><span class="profile-name">You</span><span class="profile-age">25</span></div>
+                        <div class="profile-location"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>Los Angeles, CA</div>
+                    </div>
+                </div>
+                <div class="profile-body">
+                    <div class="profile-main-actions"><button class="profile-action-btn secondary" style="flex:1;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit Profile</button></div>
+                    <div class="profile-section"><h3 class="profile-section-title"><span class="icon">💫</span> About Me</h3><p class="profile-bio">Just a chill soul looking for good vibes and even better company. Love exploring new strains, going to concerts, and late-night deep conversations. 420 friendly obviously 🍃</p></div>
+                    <div class="profile-section">
+                        <h3 class="profile-section-title"><span class="icon">🍃</span> My Smoking Preferences</h3>
+                        <div class="smoking-prefs">
+                            <div class="smoking-pref-card"><div class="pref-icon">🌿</div><div class="pref-label">Preferred Strain</div><div class="pref-value">Hybrid</div></div>
+                            <div class="smoking-pref-card"><div class="pref-icon">💨</div><div class="pref-label">Method</div><div class="pref-value">Vape & Edibles</div></div>
+                            <div class="smoking-pref-card"><div class="pref-icon">📅</div><div class="pref-label">Frequency</div><div class="pref-value">Weekends</div></div>
+                            <div class="smoking-pref-card"><div class="pref-icon">🎯</div><div class="pref-label">Tolerance</div><div class="pref-value">Medium</div></div>
+                        </div>
+                    </div>
+                    <div class="profile-section"><h3 class="profile-section-title"><span class="icon">⭐</span> My Favorite Strains</h3><div class="strain-tags"><span class="strain-tag">🔥 OG Kush</span><span class="strain-tag">🍊 Tangie</span><span class="strain-tag">🍇 Granddaddy Purple</span></div></div>
+                </div>
+            </div>
+        </div>
+
+        <nav class="bottom-nav">
+            <a class="nav-item active" data-page="discover" onclick="switchPage('discover')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg><span class="nav-label">Discover</span></a>
+            <a class="nav-item" data-page="matches" onclick="switchPage('matches')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="nav-label">Match</span></a>
+            <a class="nav-item" onclick="showComingSoon('Chat')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="nav-label">Chat</span></a>
+            <a class="nav-item" data-page="myprofile" onclick="switchPage('myprofile')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="nav-label">Profile</span></a>
+        </nav>
+    </div>
+
+    <div class="match-overlay" id="matchOverlay">
+        <div class="match-leaves" id="matchLeaves"></div>
+        <div class="match-content" id="matchContent">
+            <div class="match-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+            <h2 class="match-title">It's a Vibe! 🍃</h2>
+            <p class="match-subtitle">You and <span id="matchName">Jasmine</span> liked each other</p>
+            <div class="match-photos"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop" alt="You" class="match-photo"><img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=200&h=200&fit=crop" alt="Match" class="match-photo" id="matchPhoto"></div>
+            <div class="match-actions"><button class="match-btn primary" onclick="sendMessage()">Send Message</button><button class="match-btn secondary" onclick="closeMatch()">Keep Vibing</button></div>
+        </div>
+    </div>
+
+    <script>
+        const profiles = {
+            jasmine: { name: "Jasmine", age: 24, location: "2 miles away • Los Angeles", image: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600&h=880&fit=crop", heroImage: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800&h=800&fit=crop", tags: ["🍃 420 Friendly", "🎵 Live Music", "🌙 Night Owl"], online: true, verified: true, bio: "Looking for someone to share good vibes and even better strains with. I'm into chill nights, creative conversations, and finding that perfect balance between relaxation and adventure. Let's roll one and see where the night takes us ✨", strain: "Sativa", method: "Joints & Bongs", frequency: "Daily", tolerance: "High", favoriteStrains: ["🍋 Lemon Haze", "🍇 Purple Kush", "🍪 Girl Scout Cookies"], interests: ["🎵 Live Music", "🌙 Night Owl", "🎨 Art", "🧘 Yoga"], photos: ["https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=300&h=300&fit=crop", "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&h=300&fit=crop", "https://images.unsplash.com/photo-1496440737103-cd596325d314?w=300&h=300&fit=crop"] },
+            luna: { name: "Luna", age: 26, location: "3 miles away • Venice Beach", image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&h=880&fit=crop", heroImage: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800&h=800&fit=crop", tags: ["🍃 Daily Toker", "🎨 Artist", "🧘 Yoga"], online: true, verified: true, bio: "Artist by day, stoner by night 🎨 Love painting while high and getting lost in creative flow.", strain: "Hybrid", method: "Vape Pen", frequency: "Daily", tolerance: "High", favoriteStrains: ["🌈 Zkittlez", "🍊 Mimosa", "🎨 Gelato"], interests: ["🎨 Art", "🧘 Yoga", "🌅 Sunsets", "📚 Philosophy"], photos: ["https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&h=300&fit=crop"] },
+            sage: { name: "Sage", age: 23, location: "5 miles away • Silver Lake", image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&h=880&fit=crop", heroImage: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&h=800&fit=crop", tags: ["🌿 Sativa", "🎸 Musician", "🌅 Sunsets"], online: false, verified: true, bio: "Musician vibes only 🎸 I write my best songs when I'm elevated.", strain: "Sativa", method: "Joints", frequency: "Weekends", tolerance: "Medium", favoriteStrains: ["⚡ Green Crack", "🍋 Super Lemon Haze"], interests: ["🎸 Guitar", "🎤 Singing", "🌅 Sunsets"], photos: ["https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=300&h=300&fit=crop"] },
+            willow: { name: "Willow", age: 28, location: "1 mile away • Echo Park", image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&h=880&fit=crop", heroImage: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&h=800&fit=crop", tags: ["💨 Edibles", "📚 Reader", "🍷 Wine & Weed"], online: true, verified: false, bio: "Edibles connoisseur 🍪 Love a good book, a glass of wine, and a strong edible.", strain: "Indica", method: "Edibles", frequency: "Daily", tolerance: "Very High", favoriteStrains: ["🍇 Granddaddy Purple", "🫐 Blueberry"], interests: ["📚 Reading", "🍷 Wine", "🍳 Cooking"], photos: ["https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&h=300&fit=crop"] },
+            aurora: { name: "Aurora", age: 25, location: "4 miles away • Hollywood", image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&h=880&fit=crop", heroImage: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=800&h=800&fit=crop", tags: ["🍃 420", "🎬 Films", "🌙 Night Sessions"], online: true, verified: true, bio: "Film buff and night owl 🎬 Nothing beats watching a classic movie while properly elevated.", strain: "Hybrid", method: "Bong & Dabs", frequency: "Daily", tolerance: "High", favoriteStrains: ["🎬 Wedding Cake", "🍯 Honey Bun"], interests: ["🎬 Films", "🌙 Night Owl", "🎮 Gaming"], photos: ["https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300&h=300&fit=crop"] },
+            ivy: { name: "Ivy", age: 27, location: "6 miles away • Santa Monica", image: "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=600&h=880&fit=crop", heroImage: "https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=800&h=800&fit=crop", tags: ["🎵 Live Music", "🏄 Beach", "🌿 Organic"], online: false, verified: true, bio: "Beach babe & music lover 🏄‍♀️ Catch me at concerts or on the beach.", strain: "Sativa", method: "Organic Joints", frequency: "Social", tolerance: "Medium", favoriteStrains: ["🌊 Maui Wowie", "🏝️ Pineapple Express"], interests: ["🎵 Concerts", "🏄 Surfing", "🏖️ Beach"], photos: ["https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=300&h=300&fit=crop"] },
+            rose: { name: "Rose", age: 24, location: "2 miles away • Arts District", image: "https://images.unsplash.com/photo-1488716820149-c2a792ee3e67?w=600&h=880&fit=crop", heroImage: "https://images.unsplash.com/photo-1488716820149-c2a792ee3e67?w=800&h=800&fit=crop", tags: ["🌿 Sativa", "🎨 Creative", "☕ Coffee"], online: true, verified: false, bio: "Creative soul who runs on coffee and sativa 🌿", strain: "Sativa", method: "Vape & Joints", frequency: "Daily", tolerance: "Medium", favoriteStrains: ["☕ Cafe Racer", "🍋 Lemon Tree"], interests: ["🎨 Design", "☕ Coffee", "🖼️ Galleries"], photos: ["https://images.unsplash.com/photo-1488716820149-c2a792ee3e67?w=300&h=300&fit=crop"] }
+        };
+        const profileOrder = ['jasmine', 'luna', 'sage', 'willow', 'aurora', 'ivy', 'rose'];
+        let currentProfileIndex = 0, currentPage = 'discover', previousPage = 'discover';
+
+        function createSmokeParticles() {
+            const container = document.getElementById('smokeContainer');
+            for (let i = 0; i < 6; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'smoke-particle';
+                particle.style.width = `${100 + Math.random() * 150}px`;
+                particle.style.height = particle.style.width;
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.bottom = '-100px';
+                container.appendChild(particle);
+                animateSmokeParticle(particle);
+            }
+        }
+        function animateSmokeParticle(particle) {
+            anime({ targets: particle, translateY: [0, -window.innerHeight - 200], translateX: [0, (Math.random() - 0.5) * 100], scale: [0.5, 1.5], opacity: [0, 0.5, 0], easing: 'easeOutQuad', duration: 15000 + Math.random() * 10000, complete: () => { particle.style.left = `${Math.random() * 100}%`; animateSmokeParticle(particle); } });
+        }
+        function createEmbers() {
+            const container = document.getElementById('emberContainer');
+            for (let i = 0; i < 10; i++) {
+                const ember = document.createElement('div');
+                ember.className = 'ember';
+                ember.style.left = `${10 + Math.random() * 80}%`;
+                ember.style.bottom = '5%';
+                container.appendChild(ember);
+                animateEmber(ember, i * 600);
+            }
+        }
+        function animateEmber(ember, delay) {
+            anime({ targets: ember, translateY: [0, -(150 + Math.random() * 250)], translateX: () => (Math.random() - 0.5) * 50, opacity: [0, 1, 1, 0], scale: [0, 1, 0.5], easing: 'easeOutQuad', duration: 3500 + Math.random() * 2500, delay: delay, complete: () => { ember.style.left = `${10 + Math.random() * 80}%`; animateEmber(ember, Math.random() * 1500); } });
+        }
+        function createLeaves() {
+            const container = document.getElementById('leafContainer');
+            const leafEmojis = ['🍃', '🌿', '☘️'];
+            for (let i = 0; i < 5; i++) {
+                const leaf = document.createElement('div');
+                leaf.className = 'leaf';
+                leaf.textContent = leafEmojis[Math.floor(Math.random() * leafEmojis.length)];
+                leaf.style.left = `${Math.random() * 100}%`;
+                leaf.style.top = '-20px';
+                container.appendChild(leaf);
+                animateLeaf(leaf, i * 2500);
+            }
+        }
+        function animateLeaf(leaf, delay) {
+            anime({ targets: leaf, translateY: [0, window.innerHeight + 50], translateX: () => [(Math.random() - 0.5) * 50, (Math.random() - 0.5) * 100], rotate: [0, 360 * (Math.random() > 0.5 ? 1 : -1)], opacity: [0, 0.35, 0.35, 0], easing: 'easeInOutSine', duration: 7000 + Math.random() * 5000, delay: delay, complete: () => { leaf.style.left = `${Math.random() * 100}%`; animateLeaf(leaf, Math.random() * 4000); } });
+        }
+        function animateAmbientLights() { anime({ targets: '.ambient-light', opacity: [0.4, 0.7, 0.4], scale: [1, 1.1, 1], easing: 'easeInOutSine', duration: 8000, loop: true, delay: anime.stagger(2000) }); }
+
+        const card = document.getElementById('currentCard');
+        const likeIndicator = document.getElementById('likeIndicator');
+        const nopeIndicator = document.getElementById('nopeIndicator');
+        let startX = 0, currentX = 0, isDragging = false;
+        card.addEventListener('mousedown', startDrag);
+        card.addEventListener('touchstart', startDrag, { passive: true });
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('touchmove', drag, { passive: true });
+        document.addEventListener('mouseup', endDrag);
+        document.addEventListener('touchend', endDrag);
+
+        function startDrag(e) { isDragging = true; startX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX; card.style.transition = 'none'; }
+        function drag(e) {
+            if (!isDragging) return;
+            currentX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+            const diff = currentX - startX;
+            card.style.transform = `translateX(${diff}px) rotate(${diff * 0.08}deg)`;
+            if (diff > 50) { likeIndicator.style.opacity = Math.min((diff - 50) / 100, 1); nopeIndicator.style.opacity = 0; }
+            else if (diff < -50) { nopeIndicator.style.opacity = Math.min((-diff - 50) / 100, 1); likeIndicator.style.opacity = 0; }
+            else { likeIndicator.style.opacity = 0; nopeIndicator.style.opacity = 0; }
+        }
+        function endDrag() {
+            if (!isDragging) return;
+            isDragging = false;
+            const diff = currentX - startX;
+            card.style.transition = 'transform 0.4s cubic-bezier(0.22, 1, 0.36, 1)';
+            if (diff > 100) swipeRight();
+            else if (diff < -100) swipeLeft();
+            else { card.style.transform = ''; likeIndicator.style.opacity = 0; nopeIndicator.style.opacity = 0; }
+        }
+        function swipeRight() { anime({ targets: card, translateX: '150%', rotate: 20, opacity: 0, easing: 'easeOutQuad', duration: 400, complete: () => { if (Math.random() > 0.4) showMatch(); loadNextProfile(); } }); likeIndicator.style.opacity = 1; }
+        function swipeLeft() { anime({ targets: card, translateX: '-150%', rotate: -20, opacity: 0, easing: 'easeOutQuad', duration: 400, complete: loadNextProfile }); nopeIndicator.style.opacity = 1; }
+        function superLike() { anime({ targets: card, translateY: '-150%', scale: 0.5, opacity: 0, easing: 'easeOutQuad', duration: 400, complete: () => { showMatch(); loadNextProfile(); } }); }
+        function rewind() { currentProfileIndex = (currentProfileIndex - 1 + profileOrder.length) % profileOrder.length; loadNextProfile(); }
+
+        function loadNextProfile() {
+            currentProfileIndex = (currentProfileIndex + 1) % profileOrder.length;
+            const p = profiles[profileOrder[currentProfileIndex]];
+            card.style.transition = 'none'; card.style.transform = ''; card.style.opacity = '1';
+            card.querySelector('.card-image').src = p.image;
+            card.querySelector('.card-name').textContent = p.name;
+            card.querySelector('.card-age').textContent = p.age;
+            card.querySelector('.card-location').innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>${p.location}`;
+            card.querySelector('.card-tags').innerHTML = p.tags.map((t, i) => `<span class="card-tag ${i === 0 ? 'primary' : ''}">${t}</span>`).join('');
+            card.querySelector('.card-badge.online').style.display = p.online ? 'flex' : 'none';
+            card.querySelector('.card-badge.verified').style.display = p.verified ? 'flex' : 'none';
+            likeIndicator.style.opacity = 0; nopeIndicator.style.opacity = 0;
+            anime({ targets: card, scale: [0.9, 1], opacity: [0, 1], easing: 'easeOutQuad', duration: 300 });
+        }
+        function openCurrentProfile() { openProfile(profileOrder[currentProfileIndex]); }
+
+        function openProfile(key) {
+            const p = profiles[key]; if (!p) return;
+            document.getElementById('profileHeroImage').src = p.heroImage;
+            document.getElementById('profileName').textContent = p.name;
+            document.getElementById('profileAge').textContent = p.age;
+            document.getElementById('profileLocation').innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>${p.location}`;
+            document.getElementById('profileBio').textContent = p.bio;
+            document.getElementById('prefStrain').textContent = p.strain;
+            document.getElementById('prefMethod').textContent = p.method;
+            document.getElementById('prefFrequency').textContent = p.frequency;
+            document.getElementById('prefTolerance').textContent = p.tolerance;
+            document.getElementById('favoriteStrains').innerHTML = p.favoriteStrains.map(s => `<span class="strain-tag">${s}</span>`).join('');
+            document.getElementById('interestTags').innerHTML = p.interests.map(i => `<span class="interest-tag">${i}</span>`).join('');
+            document.getElementById('photoGallery').innerHTML = p.photos.map(ph => `<div class="gallery-photo"><img src="${ph}" alt="Photo"></div>`).join('');
+            switchPage('profile');
+        }
+
+        function switchPage(pageName) {
+            previousPage = currentPage; currentPage = pageName;
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            const page = document.getElementById(pageName + 'Page');
+            if (page) { page.classList.add('active'); page.scrollTop = 0; }
+            const navItem = document.querySelector(`[data-page="${pageName}"]`);
+            if (navItem) navItem.classList.add('active');
+        }
+        function goBack() { switchPage(previousPage); }
+        function showComingSoon(f) { alert(`${f} coming soon! 🍃`); }
+
+        function showMatch() {
+            const p = profiles[profileOrder[currentProfileIndex]];
+            document.getElementById('matchName').textContent = p.name;
+            document.getElementById('matchPhoto').src = p.heroImage;
+            document.getElementById('matchOverlay').classList.add('show');
+            setTimeout(() => document.getElementById('matchContent').classList.add('animate'), 100);
+            createMatchLeaves();
+            anime({ targets: '.match-icon', scale: [0.5, 1.1, 1], opacity: [0, 1], easing: 'easeOutElastic(1, 0.5)', duration: 800, delay: 200 });
+        }
+        function createMatchLeaves() {
+            const container = document.getElementById('matchLeaves'); container.innerHTML = '';
+            const leafEmojis = ['🍃', '🌿', '💨', '✨', '💜'];
+            for (let i = 0; i < 15; i++) {
+                const leaf = document.createElement('div'); leaf.className = 'match-leaf';
+                leaf.textContent = leafEmojis[Math.floor(Math.random() * leafEmojis.length)];
+                leaf.style.left = `${Math.random() * 100}%`; leaf.style.top = '-30px';
+                container.appendChild(leaf);
+                anime({ targets: leaf, translateY: window.innerHeight + 50, translateX: (Math.random() - 0.5) * 200, rotate: 360 * (Math.random() > 0.5 ? 1 : -1), opacity: [0, 1, 1, 0], easing: 'easeOutQuad', duration: 3000 + Math.random() * 2000, delay: i * 100 });
+            }
+        }
+        function closeMatch() { anime({ targets: document.getElementById('matchOverlay'), opacity: [1, 0], easing: 'easeOutQuad', duration: 300, complete: () => { document.getElementById('matchOverlay').classList.remove('show'); document.getElementById('matchContent').classList.remove('animate'); } }); }
+        function sendMessage() { closeMatch(); showComingSoon('Chat'); }
+
+        document.querySelectorAll('.strain-pill').forEach(pill => { pill.addEventListener('click', () => { document.querySelectorAll('.strain-pill').forEach(p => p.classList.remove('active')); pill.classList.add('active'); }); });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            createSmokeParticles(); createEmbers(); createLeaves(); animateAmbientLights();
+            anime({ targets: '.featured-card', opacity: [0, 1], translateY: [20, 0], easing: 'easeOutQuad', duration: 600, delay: anime.stagger(100, { start: 300 }) });
+            anime({ targets: '.nearby-card', opacity: [0, 1], translateX: [-20, 0], easing: 'easeOutQuad', duration: 500, delay: anime.stagger(80, { start: 600 }) });
+        });
+    </script>
+</body>
+</html>
