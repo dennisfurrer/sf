@@ -1,6 +1,6 @@
 "use client";
 
-import { Compass, Leaf, Video, Heart, User } from "lucide-react";
+import { Compass, Heart, Leaf, User, Video } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "~/i18n/routing";
 import { cn } from "~/lib/utils";
@@ -22,7 +22,7 @@ export function BottomNav() {
 
   return (
     <nav
-      className="fixed bottom-0 inset-x-0 border-t safe-bottom z-nav"
+      className="mt-2 fixed bottom-0 inset-x-0 border-t safe-bottom z-nav"
       style={{
         background: "rgba(10, 10, 10, 0.95)",
         backdropFilter: "blur(20px)",
@@ -30,7 +30,7 @@ export function BottomNav() {
         borderColor: "rgba(255, 255, 255, 0.08)",
       }}
     >
-      <div className="grid grid-cols-5 py-2 max-w-md mx-auto">
+      <div className="grid grid-cols-5 pb-0.5 max-w-md mx-auto">
         {navItems.map(({ icon: Icon, labelKey, href }) => {
           const isActive =
             pathname === href || pathname.startsWith(`${href}/`);
@@ -40,7 +40,7 @@ export function BottomNav() {
               key={labelKey}
               href={href}
               className={cn(
-                "relative flex flex-col items-center justify-center gap-1 py-2 transition-all duration-200",
+                "mt-5 relative flex flex-col items-center justify-center gap-0.5 py-0.5 transition-all duration-200",
                 !isActive && "text-white/40 hover:text-white/60"
               )}
               style={isActive ? { color: GOLD } : undefined}

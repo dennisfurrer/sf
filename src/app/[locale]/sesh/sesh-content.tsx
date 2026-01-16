@@ -438,8 +438,9 @@ export function SeshContent() {
 
         {/* Live Sessions Banner */}
         {liveSessions.length > 0 && (
-          <div
-            className="p-3.5 rounded-2xl flex items-center gap-3 opacity-0"
+          <button
+            onClick={() => setFilter("live")}
+            className="w-full p-3.5 rounded-2xl flex items-center gap-3 opacity-0 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer text-left"
             style={{
               background: "linear-gradient(135deg, color-mix(in srgb, var(--color-accent-2) 10%, transparent) 0%, transparent 100%)",
               border: "1px solid color-mix(in srgb, var(--color-accent-2) 20%, transparent)",
@@ -460,7 +461,7 @@ export function SeshContent() {
               <p className="text-white/40 text-xs">{t("joinNow")}</p>
             </div>
             <ChevronRight className="w-4 h-4 text-white/20" />
-          </div>
+          </button>
         )}
 
         {/* Session Cards */}

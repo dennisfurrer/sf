@@ -108,6 +108,7 @@ function TabButton({
 function VibeQuote({ promptKey, answer, index }: { promptKey: string; answer: string; index: number }) {
   const t = useTranslations("warStoryPrompts");
   const isEven = index % 2 === 0;
+  const isFirst = index === 0;
 
   return (
     <div
@@ -126,7 +127,13 @@ function VibeQuote({ promptKey, answer, index }: { promptKey: string; answer: st
         <Sparkles className="w-4 h-4" />
         {t(promptKey)}
       </p>
-      <p className="text-white text-lg font-display leading-relaxed italic">"{answer}"</p>
+      {isFirst ? (
+        <p className="text-white text-3xl font-body font-bold text-center leading-tight tracking-wide">
+          {answer}
+        </p>
+      ) : (
+        <p className="text-white text-lg font-display leading-relaxed italic">"{answer}"</p>
+      )}
     </div>
   );
 }

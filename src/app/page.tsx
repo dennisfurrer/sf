@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-// Root page redirects to the default locale
+// Root page redirects to the discover page (default locale doesn't need prefix)
 export default function RootPage() {
-  redirect("/en");
+  redirect("/discover");
 }

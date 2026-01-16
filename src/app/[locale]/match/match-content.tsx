@@ -1,16 +1,16 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
-import Image from "next/image";
-import { useTranslations } from "next-intl";
-import { Heart, X, Star, RotateCcw, Zap, MapPin, BadgeCheck, Flame, Leaf, ChevronLeft } from "lucide-react";
 import anime from "animejs";
-import { mockProfiles, currentUser, type Profile } from "~/lib/mock-data";
-import { cn } from "~/lib/utils";
-import { Link } from "~/i18n/routing";
+import { BadgeCheck, ChevronLeft, Flame, Heart, Leaf, MapPin, RotateCcw, Star, X, Zap } from "lucide-react";
+import { useTranslations } from "next-intl";
+import Image from "next/image";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { MatchModal } from "~/components/features/match-modal";
+import { Link } from "~/i18n/routing";
+import { mockProfiles, type Profile } from "~/lib/mock-data";
+import { cn } from "~/lib/utils";
 
-// Swipe Card Component
+// Full Screen Swipe Card Component
 interface SwipeCardProps {
   profile: Profile;
   stackPosition: number;
@@ -25,6 +25,9 @@ function SwipeCard({ profile, stackPosition, onSwipe, cardRef }: SwipeCardProps)
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [swipeIndicator, setSwipeIndicator] = useState<"left" | "right" | "up" | null>(null);
+
+  // Calculate smoke compatibility
+  const compatibility = 65 + Math.floor(profile.id.charCodeAt(0) % 30);
 
   const handleDragStart = (e: React.MouseEvent | React.TouchEvent) => {
     if (stackPosition !== 0) return;
@@ -43,7 +46,7 @@ function SwipeCard({ profile, stackPosition, onSwipe, cardRef }: SwipeCardProps)
 
       const deltaX = clientX - dragStart.x;
       const deltaY = clientY - dragStart.y;
-      const rotation = deltaX * 0.1;
+      const rotation = deltaX * 0.05;
 
       ref.current.style.transform = `translateX(${deltaX}px) translateY(${deltaY}px) rotate(${rotation}deg)`;
 
@@ -125,67 +128,87 @@ function SwipeCard({ profile, stackPosition, onSwipe, cardRef }: SwipeCardProps)
     };
   }, [isDragging, handleDragMove, handleDragEnd]);
 
-  // Stack styling with enhanced shadows
+  // Stack styling
   const stackStyles: React.CSSProperties = {
     zIndex: 10 - stackPosition,
-    transform: `scale(${1 - stackPosition * 0.05}) translateY(${stackPosition * 12}px)`,
-    opacity: stackPosition > 2 ? 0 : 1 - stackPosition * 0.2,
-    boxShadow: stackPosition === 0
-      ? "0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 12px 24px -8px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05)"
-      : `0 ${15 - stackPosition * 5}px ${30 - stackPosition * 10}px -12px rgba(0, 0, 0, ${0.4 - stackPosition * 0.1})`,
+    opacity: stackPosition > 2 ? 0 : 1 - stackPosition * 0.3,
   };
+
+  if (stackPosition !== 0) return null; // Only show top card
 
   return (
     <div
       ref={ref}
       className={cn(
-        "absolute w-full max-w-[340px] h-[480px] rounded-3xl overflow-hidden",
+        "absolute inset-0 rounded-b-3xl overflow-hidden",
         stackPosition === 0 && "cursor-grab active:cursor-grabbing"
       )}
       style={stackStyles}
       onMouseDown={handleDragStart}
       onTouchStart={handleDragStart}
     >
-      {/* Profile Image */}
-      <Image src={profile.photo} alt={profile.name} fill className="object-cover" sizes="340px" priority={stackPosition === 0} />
+      {/* Profile Image - fills card */}
+      <Image src={profile.photo} alt={profile.name} fill className="object-cover object-top" sizes="100vw" priority={stackPosition === 0} />
 
-      {/* Gradient overlay - enhanced */}
+      {/* Gradient overlay */}
       <div
         className="absolute inset-0"
         style={{
-          background: "linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 30%, rgba(0,0,0,0.1) 60%, transparent 100%)"
+          background: "linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0.4) 100%)"
         }}
       />
 
-      {/* Top badges */}
-      <div className="absolute top-4 left-4 right-4 flex justify-between items-start z-10">
-        <div className="flex gap-2">
-          {profile.verified && (
-            <span
-              className="px-2.5 py-1 rounded-full text-xs font-medium flex items-center gap-1 backdrop-blur-md"
-              style={{ background: "rgba(0, 0, 0, 0.6)", color: "#D4AF37", border: "1px solid rgba(212, 175, 55, 0.3)" }}
+      {/* Top bar - Back + Verified left, Compatibility center, Online right */}
+      <div className="absolute top-0 left-0 right-0 pt-2 px-2 z-10 safe-top">
+        <div className="flex items-center justify-between">
+          {/* Left - Back button + Verified badge */}
+          <div className="flex items-center gap-2">
+            <Link
+              href="/discover"
+              className="w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-md transition-all hover:bg-white/20"
+              style={{ background: "rgba(0, 0, 0, 0.6)" }}
             >
-              <BadgeCheck className="w-3 h-3" />
-              Verified
-            </span>
-          )}
-        </div>
-        {profile.online && (
-          <span
-            className="px-2.5 py-1 rounded-full text-xs font-medium flex items-center gap-1 backdrop-blur-md"
-            style={{ background: "rgba(0, 0, 0, 0.6)", color: "#4ade80", border: "1px solid rgba(34, 197, 94, 0.3)" }}
+              <ChevronLeft className="w-5 h-5 text-white" />
+            </Link>
+            {profile.verified && (
+              <span
+                className="w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-md"
+                style={{ background: "rgba(0, 0, 0, 0.6)", border: "1px solid rgba(212, 175, 55, 0.3)" }}
+              >
+                <BadgeCheck className="w-4 h-4" style={{ color: "#D4AF37" }} />
+              </span>
+            )}
+          </div>
+
+          {/* Compatibility - center */}
+          <div
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full backdrop-blur-md"
+            style={{ background: "rgba(233, 30, 99, 0.2)", border: "1px solid rgba(233, 30, 99, 0.3)" }}
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-            Online
-          </span>
-        )}
+            <Flame className="w-3.5 h-3.5 text-pink-400" />
+            <span className="text-white/80 text-xs font-medium">Compatibility</span>
+            <span className="text-pink-400 text-sm font-bold">{compatibility}%</span>
+          </div>
+
+          {/* Online badge - right */}
+          <div className="flex items-center">
+            {profile.online && (
+              <span
+                className="w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-md"
+                style={{ background: "rgba(0, 0, 0, 0.6)", border: "1px solid rgba(34, 197, 94, 0.3)" }}
+              >
+                <span className="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse" />
+              </span>
+            )}
+          </div>
+        </div>
       </div>
 
-      {/* Content */}
-      <div className="absolute bottom-0 left-0 right-0 p-5 z-10">
+      {/* Content - bottom */}
+      <div className="absolute bottom-0 left-0 right-0 p-5 pb-4 z-10">
         <div className="flex items-baseline gap-2 mb-1">
-          <h3 className="font-display text-2xl font-medium text-white">{profile.name}</h3>
-          <span className="text-lg text-white/50 font-light">{profile.age}</span>
+          <h3 className="font-display text-3xl font-medium text-white">{profile.name}</h3>
+          <span className="text-xl text-white/50 font-light">{profile.age}</span>
         </div>
 
         <div className="flex items-center gap-1.5 text-white/50 text-sm mb-3">
@@ -214,12 +237,12 @@ function SwipeCard({ profile, stackPosition, onSwipe, cardRef }: SwipeCardProps)
       {/* Swipe indicators */}
       <div
         className={cn(
-          "absolute top-1/2 right-5 -translate-y-1/2 rotate-12 transition-opacity duration-200 pointer-events-none",
+          "absolute top-1/2 right-8 -translate-y-1/2 rotate-12 transition-opacity duration-200 pointer-events-none",
           swipeIndicator === "right" ? "opacity-100" : "opacity-0"
         )}
       >
         <span
-          className="px-5 py-2.5 rounded-xl font-display text-xl font-bold tracking-widest"
+          className="px-6 py-3 rounded-xl font-display text-2xl font-bold tracking-widest"
           style={{
             background: "rgba(34, 197, 94, 0.3)",
             border: "3px solid #4ade80",
@@ -231,12 +254,12 @@ function SwipeCard({ profile, stackPosition, onSwipe, cardRef }: SwipeCardProps)
       </div>
       <div
         className={cn(
-          "absolute top-1/2 left-5 -translate-y-1/2 -rotate-12 transition-opacity duration-200 pointer-events-none",
+          "absolute top-1/2 left-8 -translate-y-1/2 -rotate-12 transition-opacity duration-200 pointer-events-none",
           swipeIndicator === "left" ? "opacity-100" : "opacity-0"
         )}
       >
         <span
-          className="px-5 py-2.5 rounded-xl font-display text-xl font-bold tracking-widest"
+          className="px-6 py-3 rounded-xl font-display text-2xl font-bold tracking-widest"
           style={{
             background: "rgba(239, 68, 68, 0.3)",
             border: "3px solid #ef4444",
@@ -248,12 +271,12 @@ function SwipeCard({ profile, stackPosition, onSwipe, cardRef }: SwipeCardProps)
       </div>
       <div
         className={cn(
-          "absolute top-1/4 left-1/2 -translate-x-1/2 transition-opacity duration-200 pointer-events-none",
+          "absolute top-1/3 left-1/2 -translate-x-1/2 transition-opacity duration-200 pointer-events-none",
           swipeIndicator === "up" ? "opacity-100" : "opacity-0"
         )}
       >
         <span
-          className="px-5 py-2.5 rounded-xl font-display text-xl font-bold tracking-widest"
+          className="px-6 py-3 rounded-xl font-display text-2xl font-bold tracking-widest"
           style={{
             background: "rgba(212, 175, 55, 0.3)",
             border: "3px solid #D4AF37",
@@ -272,6 +295,7 @@ export function MatchContent() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showMatch, setShowMatch] = useState(false);
   const [matchedProfile, setMatchedProfile] = useState<Profile | null>(null);
+  const [hasLikedOnce, setHasLikedOnce] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
 
@@ -306,10 +330,18 @@ export function MatchContent() {
       duration: 400,
       easing: "easeOutExpo",
       complete: () => {
-        // Check for match (random 30% chance for demo)
-        if ((direction === "right" || direction === "up") && Math.random() > 0.7) {
-          setMatchedProfile(mockProfiles[currentIndex]!);
-          setShowMatch(true);
+        // First like always shows match, then 30% chance after that
+        if (direction === "right" || direction === "up") {
+          if (!hasLikedOnce) {
+            // First like - always match!
+            setMatchedProfile(mockProfiles[currentIndex]!);
+            setShowMatch(true);
+            setHasLikedOnce(true);
+          } else if (Math.random() > 0.7) {
+            // Subsequent likes - 30% chance
+            setMatchedProfile(mockProfiles[currentIndex]!);
+            setShowMatch(true);
+          }
         }
         setCurrentIndex((prev) => prev + 1);
       },
@@ -330,64 +362,33 @@ export function MatchContent() {
   const isOutOfProfiles = currentIndex >= mockProfiles.length;
 
   return (
-    <div ref={pageRef} className="opacity-0 flex flex-col min-h-screen pb-20">
-      {/* Header */}
-      <header
-        className="px-4 pt-14 pb-3 flex items-center justify-between"
-        style={{
-          background: "rgba(10, 10, 10, 0.95)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
-        }}
-      >
-        <Link
-          href="/discover"
-          className="w-10 h-10 rounded-full flex items-center justify-center transition-all hover:bg-white/10"
-        >
-          <ChevronLeft className="w-5 h-5 text-white/60" />
-        </Link>
-        <div className="text-center">
-          <h1 className="font-display text-lg text-white flex items-center gap-2 justify-center">
-            <Heart className="w-5 h-5 text-pink-400" fill="currentColor" />
-            Match
-          </h1>
-          <p className="text-white/40 text-xs">Find your smoke partner for life</p>
-        </div>
-        <Link href="/discover" className="w-10 h-10 flex items-center justify-center">
-          <Image
-            src="/logo.png"
-            alt="StonelyFans"
-            width={32}
-            height={32}
-            className="object-contain opacity-60 hover:opacity-100 transition-opacity"
-          />
-        </Link>
-      </header>
-
-      {/* Card Stack */}
-      <div className="flex-1 relative flex items-center justify-center px-4">
+    <div ref={pageRef} className="opacity-0 flex flex-col h-[100dvh] pb-20 overflow-hidden">
+      {/* Card Area - takes remaining space above buttons */}
+      <div className="flex-1 relative overflow-hidden">
         {isOutOfProfiles ? (
-          <div className="text-center px-8">
-            <div
-              className="w-24 h-24 mx-auto mb-6 rounded-full flex items-center justify-center"
-              style={{ background: "rgba(233, 30, 99, 0.1)" }}
-            >
-              <Heart className="w-12 h-12 text-pink-400/50" />
+          <div className="h-full flex items-center justify-center">
+            <div className="text-center px-8">
+              <div
+                className="w-24 h-24 mx-auto mb-6 rounded-full flex items-center justify-center"
+                style={{ background: "rgba(233, 30, 99, 0.1)" }}
+              >
+                <Heart className="w-12 h-12 text-pink-400/50" />
+              </div>
+              <h3 className="font-display text-xl text-white mb-2">{t("outOfProfiles")}</h3>
+              <p className="text-white/50 mb-6">{t("checkBackLater")}</p>
+              <Link
+                href="/discover"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all hover:scale-105"
+                style={{
+                  background: "linear-gradient(135deg, rgba(233, 30, 99, 0.2), rgba(233, 30, 99, 0.1))",
+                  border: "1px solid rgba(233, 30, 99, 0.3)",
+                  color: "#f472b6",
+                }}
+              >
+                <Leaf className="w-4 h-4" />
+                Explore other features
+              </Link>
             </div>
-            <h3 className="font-display text-xl text-white mb-2">{t("outOfProfiles")}</h3>
-            <p className="text-white/50 mb-6">{t("checkBackLater")}</p>
-            <Link
-              href="/discover"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all hover:scale-105"
-              style={{
-                background: "linear-gradient(135deg, rgba(233, 30, 99, 0.2), rgba(233, 30, 99, 0.1))",
-                border: "1px solid rgba(233, 30, 99, 0.3)",
-                color: "#f472b6",
-              }}
-            >
-              <Leaf className="w-4 h-4" />
-              Explore other features
-            </Link>
           </div>
         ) : (
           remainingProfiles.map((profile, i) => (
@@ -400,125 +401,92 @@ export function MatchContent() {
             />
           ))
         )}
+
       </div>
 
-      {/* Smoke Compatibility - Below Card */}
-      {!isOutOfProfiles && remainingProfiles[0] && (
-        <div className="px-4 mb-2">
-          <div
-            className="max-w-[340px] mx-auto p-3 rounded-xl flex items-center gap-3"
-            style={{ background: "rgba(233, 30, 99, 0.15)", border: "1px solid rgba(233, 30, 99, 0.2)" }}
-          >
-            <div
-              className="w-10 h-10 rounded-full flex items-center justify-center"
-              style={{ background: "rgba(233, 30, 99, 0.2)" }}
-            >
-              <Flame className="w-5 h-5 text-pink-400" />
-            </div>
-            <div className="flex-1">
-              <div className="text-xs text-white/50 mb-1">Smoke Compatibility</div>
-              <div className="flex items-center gap-2">
-                <div className="flex-1 h-1.5 rounded-full bg-white/10 overflow-hidden">
-                  <div
-                    className="h-full rounded-full"
-                    style={{
-                      width: `${65 + Math.floor(remainingProfiles[0].id.charCodeAt(0) % 30)}%`,
-                      background: "linear-gradient(90deg, #ec4899, #f472b6)"
-                    }}
-                  />
-                </div>
-                <span className="text-pink-400 text-sm font-medium">
-                  {65 + Math.floor(remainingProfiles[0].id.charCodeAt(0) % 30)}%
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Action Bar */}
+      {/* Action Bar - Fixed height section below image */}
       {!isOutOfProfiles && (
-        <div className="py-5 px-4">
-          <div className="flex items-center justify-center gap-4">
+        <div className="flex-shrink-0 py-3 px-4" style={{ background: "rgba(10, 10, 10, 0.95)" }}>
+          <div className="flex items-center justify-center gap-5">
             {/* Rewind */}
             <button
               onClick={handleRewind}
               disabled={currentIndex === 0}
               className={cn(
-                "w-12 h-12 rounded-full flex items-center justify-center transition-all duration-200",
+                "w-11 h-11 rounded-full flex items-center justify-center transition-all duration-200",
                 currentIndex === 0
                   ? "opacity-30 cursor-not-allowed"
                   : "hover:scale-110 active:scale-95"
               )}
               style={{
-                background: "rgba(255, 255, 255, 0.08)",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
+                background: "rgba(255, 255, 255, 0.1)",
+                border: "1px solid rgba(255, 255, 255, 0.15)",
                 color: "#D4AF37",
               }}
             >
-              <RotateCcw className="w-5 h-5" />
+              <RotateCcw className="w-4 h-4" />
             </button>
 
             {/* Pass */}
             <button
               onClick={() => handleSwipe("left")}
-              className="w-16 h-16 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95"
+              className="w-14 h-14 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95"
               style={{
-                background: "rgba(239, 68, 68, 0.15)",
-                border: "2px solid rgba(239, 68, 68, 0.4)",
+                background: "rgba(239, 68, 68, 0.2)",
+                border: "2px solid rgba(239, 68, 68, 0.5)",
                 color: "#ef4444",
-                boxShadow: "0 4px 20px rgba(239, 68, 68, 0.2)",
+                boxShadow: "0 4px 20px rgba(239, 68, 68, 0.3)",
               }}
             >
-              <X className="w-7 h-7" strokeWidth={3} />
+              <X className="w-6 h-6" strokeWidth={3} />
             </button>
 
             {/* Super Like */}
             <button
               onClick={() => handleSwipe("up")}
-              className="w-14 h-14 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95"
+              className="w-12 h-12 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95"
               style={{
-                background: "rgba(212, 175, 55, 0.15)",
-                border: "2px solid rgba(212, 175, 55, 0.4)",
+                background: "rgba(212, 175, 55, 0.2)",
+                border: "2px solid rgba(212, 175, 55, 0.5)",
                 color: "#D4AF37",
-                boxShadow: "0 4px 20px rgba(212, 175, 55, 0.2)",
+                boxShadow: "0 4px 20px rgba(212, 175, 55, 0.3)",
               }}
             >
-              <Star className="w-6 h-6" fill="currentColor" />
+              <Star className="w-5 h-5" fill="currentColor" />
             </button>
 
             {/* VIBE Button - Main CTA */}
             <button
               onClick={() => handleSwipe("right")}
-              className="w-20 h-20 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95"
+              className="w-16 h-16 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95"
               style={{
                 background: "linear-gradient(135deg, #ec4899 0%, #f472b6 100%)",
-                boxShadow: "0 8px 32px rgba(236, 72, 153, 0.4), 0 0 60px rgba(236, 72, 153, 0.2)",
+                boxShadow: "0 8px 32px rgba(236, 72, 153, 0.5), 0 0 60px rgba(236, 72, 153, 0.3)",
               }}
             >
-              <Heart className="w-9 h-9 text-white" fill="currentColor" />
+              <Heart className="w-7 h-7 text-white" fill="currentColor" />
             </button>
 
-            {/* Boost */}
+            {/* Haaajde */}
             <button
-              className="w-12 h-12 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95"
+              className="w-11 h-11 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95"
               style={{
-                background: "rgba(147, 51, 234, 0.15)",
-                border: "1px solid rgba(147, 51, 234, 0.3)",
+                background: "rgba(147, 51, 234, 0.2)",
+                border: "1px solid rgba(147, 51, 234, 0.4)",
                 color: "#a855f7",
               }}
             >
-              <Zap className="w-5 h-5" />
+              <Zap className="w-4 h-4" />
             </button>
           </div>
 
           {/* Action Labels */}
-          <div className="flex items-center justify-center gap-4 mt-2">
-            <span className="w-12 text-center text-[10px] text-white/30">Undo</span>
-            <span className="w-16 text-center text-[10px] text-red-400/70">Pass</span>
-            <span className="w-14 text-center text-[10px] text-yellow-500/70">Super</span>
-            <span className="w-20 text-center text-xs font-bold text-pink-400">VIBE</span>
-            <span className="w-12 text-center text-[10px] text-purple-400/70">Boost</span>
+          <div className="flex items-center justify-center gap-5 mt-0">
+            <span className="w-11 text-center text-[9px] text-white/40">Undo</span>
+            <span className="w-14 text-center text-[9px] text-red-400/80">Pass</span>
+            <span className="w-12 text-center text-[9px] text-yellow-500/80">Super</span>
+            <span className="w-16 text-center text-[10px] font-bold text-pink-400">VIBE</span>
+            <span className="w-11 text-center text-[9px] text-purple-400/80">Haaajde</span>
           </div>
         </div>
       )}

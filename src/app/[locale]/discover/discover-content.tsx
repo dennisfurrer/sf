@@ -114,57 +114,62 @@ function VibeFeatureCard() {
       />
 
       {/* Content */}
-      <div className="relative z-10 p-5 flex items-center gap-4">
-        {/* Icon with 3D effect */}
-        <div
-          className="relative w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3"
-          style={{
-            background: `linear-gradient(145deg, var(--color-accent-3), color-mix(in srgb, var(--color-accent-3) 70%, black))`,
-            boxShadow: `
-              0 4px 12px color-mix(in srgb, var(--color-accent-3) 40%, transparent),
-              0 8px 24px color-mix(in srgb, var(--color-accent-3) 20%, transparent),
-              inset 0 1px 0 rgba(255, 255, 255, 0.2),
-              inset 0 -2px 4px rgba(0, 0, 0, 0.2)
-            `,
-          }}
-        >
-          <Video className="w-8 h-8 text-white drop-shadow-lg" />
+      <div className="relative z-10 p-5">
+        {/* Top row - pill in top right */}
+        <div className="flex items-start justify-between mb-3">
+          {/* Icon with 3D effect */}
+          <div
+            className="relative w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3"
+            style={{
+              background: `linear-gradient(145deg, var(--color-accent-3), color-mix(in srgb, var(--color-accent-3) 70%, black))`,
+              boxShadow: `
+                0 4px 12px color-mix(in srgb, var(--color-accent-3) 40%, transparent),
+                0 8px 24px color-mix(in srgb, var(--color-accent-3) 20%, transparent),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.2)
+              `,
+            }}
+          >
+            <Video className="w-8 h-8 text-white drop-shadow-lg" />
+          </div>
+
+          {/* Pill - top right */}
+          <div
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full whitespace-nowrap"
+            style={{
+              background: "rgba(255, 255, 255, 0.06)",
+              border: "1px solid rgba(255, 255, 255, 0.08)",
+            }}
+          >
+            <span
+              className="w-2 h-2 rounded-full animate-pulse"
+              style={{ background: "var(--color-accent-1)" }}
+            />
+            <span className="text-xs font-medium" style={{ color: "var(--color-accent-1)" }}>
+              {onlineCount} vibing
+            </span>
+          </div>
         </div>
 
-        {/* Text content */}
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-3 mb-1">
-            <h3 className="font-display text-xl font-semibold text-white">
+        {/* Bottom row - title, description, arrow */}
+        <div className="flex items-center gap-4">
+          <div className="flex-1 min-w-0">
+            <h3 className="font-display text-xl font-semibold text-white mb-1">
               {t("title")}
             </h3>
-            <div
-              className="flex items-center gap-1.5 px-3 py-1 rounded-full"
-              style={{
-                background: "rgba(255, 255, 255, 0.06)",
-                border: "1px solid rgba(255, 255, 255, 0.08)",
-              }}
-            >
-              <span
-                className="w-2 h-2 rounded-full animate-pulse"
-                style={{ background: "var(--color-accent-1)" }}
-              />
-              <span className="text-xs font-medium" style={{ color: "var(--color-accent-1)" }}>
-                {onlineCount} vibing
-              </span>
-            </div>
+            <p className="text-white/50 text-sm">{t("description")}</p>
           </div>
-          <p className="text-white/50 text-sm">{t("description")}</p>
-        </div>
 
-        {/* Arrow */}
-        <div
-          className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 group-hover:translate-x-1"
-          style={{
-            background: "rgba(255, 255, 255, 0.05)",
-            border: "1px solid rgba(255, 255, 255, 0.08)",
-          }}
-        >
-          <ChevronRight className="w-5 h-5 text-white/60 group-hover:text-white transition-colors" />
+          {/* Arrow */}
+          <div
+            className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:translate-x-1"
+            style={{
+              background: "rgba(255, 255, 255, 0.05)",
+              border: "1px solid rgba(255, 255, 255, 0.08)",
+            }}
+          >
+            <ChevronRight className="w-5 h-5 text-white/60 group-hover:text-white transition-colors" />
+          </div>
         </div>
       </div>
     </Link>
@@ -372,8 +377,8 @@ function SeshFeatureCardCompact() {
         </h3>
 
         <div className="mt-auto flex items-center justify-between">
-          {/* Avatars stack */}
-          <div className="flex items-center">
+          {/* Avatars stack - 20% opacity */}
+          <div className="flex items-center opacity-20">
             <div className="flex -space-x-2">
               {sessions.slice(0, 3).map((s, i) => (
                 <div

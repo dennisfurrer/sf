@@ -11,6 +11,7 @@ import { BottomNav } from "~/components/layout/bottom-nav";
 import { Atmosphere } from "~/components/effects/atmosphere";
 import { NoiseOverlay } from "~/components/effects/noise-overlay";
 import { Vignette } from "~/components/effects/vignette";
+import { ScrollToTop } from "~/components/effects/scroll-to-top";
 
 const cormorantGaramond = Cormorant_Garamond({
   subsets: ["latin"],
@@ -93,6 +94,9 @@ export default async function LocaleLayout({
         className={`${cormorantGaramond.variable} ${outfit.variable} font-body bg-surface-black text-text-primary min-h-screen overflow-x-hidden`}
       >
         <NextIntlClientProvider messages={messages}>
+          {/* Scroll to top on route change */}
+          <ScrollToTop />
+
           {/* Atmosphere effects */}
           <Atmosphere />
           <NoiseOverlay />

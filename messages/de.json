@@ -35,7 +35,7 @@
     "popularCreators": "Beliebte Creator",
     "features": {
       "sesh": {
-        "title": "Jetzt Sesh",
+        "title": "Gits Eine?",
         "description": "Finde jemanden zum Rauchen in den nächsten 10 Minuten",
         "cta": "Sessions ansehen"
       },
@@ -186,7 +186,7 @@
     "version": "Version"
   },
   "sesh": {
-    "title": "Sesh",
+    "title": "Gits Eine?",
     "subtitle": "Finde jemanden zum Rauchen in deiner Nähe",
     "live": "LIVE",
     "virtualSession": "Virtuelle Session",
