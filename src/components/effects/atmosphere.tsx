@@ -10,48 +10,107 @@ export function Atmosphere() {
     if (!containerRef.current) return;
     const container = containerRef.current;
 
-    // Create floating particles using theme colors
-    const createParticle = () => {
+    // Create smoke plume
+    const createSmokePlume = () => {
       if (!container) return;
 
-      const particle = document.createElement("div");
-      particle.className = "absolute rounded-full pointer-events-none";
+      const plume = document.createElement("div");
+      plume.className = "absolute pointer-events-none";
 
-      const size = anime.random(4, 12);
-      const accentNum = anime.random(1, 3);
+      // Randomize smoke properties
+      const startX = anime.random(10, 90);
+      const width = anime.random(80, 200);
+      const height = anime.random(100, 250);
 
-      particle.style.cssText = `
-        width: ${size}px;
-        height: ${size}px;
-        background: var(--color-accent-${accentNum});
-        box-shadow: 0 0 ${size * 2}px var(--color-accent-${accentNum});
-        left: ${anime.random(0, 100)}%;
-        bottom: -20px;
+      plume.style.cssText = `
+        width: ${width}px;
+        height: ${height}px;
+        left: ${startX}%;
+        bottom: -50px;
         opacity: 0;
+        border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+        background: radial-gradient(ellipse at center,
+          rgba(255, 255, 255, 0.08) 0%,
+          rgba(255, 255, 255, 0.04) 30%,
+          rgba(255, 255, 255, 0.01) 60%,
+          transparent 100%
+        );
+        filter: blur(${anime.random(20, 40)}px);
+        transform-origin: center bottom;
       `;
 
-      container.appendChild(particle);
+      container.appendChild(plume);
 
+      // Animate the smoke rising and dissipating
       anime({
-        targets: particle,
-        translateY: [0, anime.random(-400, -800)],
-        translateX: anime.random(-50, 50),
-        opacity: [0, 0.7, 0],
-        duration: anime.random(6000, 12000),
+        targets: plume,
+        translateY: [0, anime.random(-500, -800)],
+        translateX: [0, anime.random(-100, 100)],
+        scaleX: [1, anime.random(1.5, 3)],
+        scaleY: [1, anime.random(1.2, 2)],
+        opacity: [0, 0.6, 0.4, 0],
+        rotate: [0, anime.random(-20, 20)],
+        duration: anime.random(8000, 15000),
         easing: "easeOutQuad",
-        complete: () => particle.remove(),
+        complete: () => plume.remove(),
       });
     };
 
-    // Spawn particles periodically
-    const interval = setInterval(createParticle, 2000);
+    // Create wispy smoke tendril
+    const createSmokeTendril = () => {
+      if (!container) return;
 
-    // Initial particles
-    for (let i = 0; i < 4; i++) {
-      setTimeout(createParticle, i * 400);
-    }
+      const tendril = document.createElement("div");
+      tendril.className = "absolute pointer-events-none";
 
-    return () => clearInterval(interval);
+      const startX = anime.random(5, 95);
+      const width = anime.random(30, 80);
+
+      tendril.style.cssText = `
+        width: ${width}px;
+        height: ${anime.random(150, 300)}px;
+        left: ${startX}%;
+        bottom: -30px;
+        opacity: 0;
+        background: linear-gradient(to top,
+          rgba(255, 255, 255, 0.06) 0%,
+          rgba(255, 255, 255, 0.02) 50%,
+          transparent 100%
+        );
+        filter: blur(${anime.random(15, 30)}px);
+        border-radius: 100px;
+        transform-origin: center bottom;
+      `;
+
+      container.appendChild(tendril);
+
+      anime({
+        targets: tendril,
+        translateY: [0, anime.random(-400, -700)],
+        translateX: () => [0, anime.random(-80, 80)],
+        scaleX: [1, anime.random(0.5, 1.5)],
+        skewX: [0, anime.random(-15, 15)],
+        opacity: [0, 0.5, 0.3, 0],
+        duration: anime.random(6000, 12000),
+        easing: "easeOutSine",
+        complete: () => tendril.remove(),
+      });
+    };
+
+    // Spawn smoke periodically
+    const plumeInterval = setInterval(createSmokePlume, 4000);
+    const tendrilInterval = setInterval(createSmokeTendril, 2500);
+
+    // Initial smoke
+    setTimeout(createSmokePlume, 500);
+    setTimeout(createSmokeTendril, 1000);
+    setTimeout(createSmokePlume, 2000);
+    setTimeout(createSmokeTendril, 3000);
+
+    return () => {
+      clearInterval(plumeInterval);
+      clearInterval(tendrilInterval);
+    };
   }, []);
 
   return (
@@ -80,7 +139,7 @@ export function Atmosphere() {
         }}
       />
 
-      {/* Particle container */}
+      {/* Smoke container */}
       <div ref={containerRef} className="absolute inset-0" />
     </div>
   );

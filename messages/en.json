@@ -137,6 +137,7 @@
     "live": "LIVE"
   },
   "warStoryPrompts": {
+    "alwaysSay": "Something I say every time I smoke...",
     "legendarySession": "My most legendary smoke session was...",
     "strainThatChanged": "The strain that changed my life...",
     "swipeRightIf": "You should swipe right if...",

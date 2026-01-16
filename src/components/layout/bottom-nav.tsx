@@ -1,6 +1,6 @@
 "use client";
 
-import { Compass, Leaf, Video, MessageCircle, User } from "lucide-react";
+import { Compass, Leaf, Video, Heart, User } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "~/i18n/routing";
 import { cn } from "~/lib/utils";
@@ -9,7 +9,7 @@ const navItems = [
   { icon: Compass, labelKey: "discover", href: "/discover" as const },
   { icon: Leaf, labelKey: "sesh", href: "/sesh" as const },
   { icon: Video, labelKey: "vibe", href: "/vibe" as const },
-  { icon: MessageCircle, labelKey: "chat", href: "/chat" as const },
+  { icon: Heart, labelKey: "match", href: "/match" as const },
   { icon: User, labelKey: "profile", href: "/profile/me" as const },
 ];
 
@@ -30,7 +30,7 @@ export function BottomNav() {
         borderColor: "rgba(255, 255, 255, 0.08)",
       }}
     >
-      <div className="flex justify-around items-center py-2 max-w-md mx-auto">
+      <div className="grid grid-cols-5 py-2 max-w-md mx-auto">
         {navItems.map(({ icon: Icon, labelKey, href }) => {
           const isActive =
             pathname === href || pathname.startsWith(`${href}/`);
@@ -40,7 +40,7 @@ export function BottomNav() {
               key={labelKey}
               href={href}
               className={cn(
-                "relative flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-all duration-200",
+                "relative flex flex-col items-center justify-center gap-1 py-2 transition-all duration-200",
                 !isActive && "text-white/40 hover:text-white/60"
               )}
               style={isActive ? { color: GOLD } : undefined}

@@ -31,6 +31,8 @@ export interface Message {
   timestamp: Date;
 }
 
+export type ConversationType = "match" | "vibe" | "sesh" | "friend";
+
 export interface Conversation {
   id: string;
   matchId: string;
@@ -39,23 +41,23 @@ export interface Conversation {
   lastMessage: string;
   lastMessageTime: Date;
   unread: number;
+  type: ConversationType;
 }
 
 // Current user profile
 export const currentUser: Profile = {
   id: "me",
-  name: "You",
+  name: "Marvin",
   age: 25,
-  photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&h=800&fit=crop",
-  location: "Los Angeles",
+  photo: "/marvin.jpeg",
+  location: "Grenchen",
   distance: "0 mi",
   online: true,
   verified: true,
   warStories: [
     {
-      promptKey: "legendarySession",
-      answer:
-        "Watching the Northern Lights in Iceland while sharing a joint with strangers from 5 different countries. The sky was dancing and so were we.",
+      promptKey: "alwaysSay",
+      answer: "BÄÄÄÄÄMBUUUU",
     },
     {
       promptKey: "swipeRightIf",
@@ -333,6 +335,7 @@ export const mockConversations: Conversation[] = [
     lastMessage: "That sounds amazing! When are you free?",
     lastMessageTime: new Date(Date.now() - 1000 * 60 * 5), // 5 mins ago
     unread: 2,
+    type: "match",
     messages: [
       {
         id: "msg-1",
@@ -379,6 +382,7 @@ export const mockConversations: Conversation[] = [
     lastMessage: "I love your art btw!",
     lastMessageTime: new Date(Date.now() - 1000 * 60 * 60 * 3), // 3 hours ago
     unread: 0,
+    type: "vibe",
     messages: [
       {
         id: "msg-7",
@@ -419,6 +423,7 @@ export const mockConversations: Conversation[] = [
     lastMessage: "Same! What's your favorite comfort movie?",
     lastMessageTime: new Date(Date.now() - 1000 * 60 * 60 * 24), // 1 day ago
     unread: 1,
+    type: "sesh",
     messages: [
       {
         id: "msg-12",
@@ -453,6 +458,7 @@ export const mockConversations: Conversation[] = [
     lastMessage: "Roll one?",
     lastMessageTime: new Date(Date.now() - 1000 * 60 * 60 * 48), // 2 days ago
     unread: 0,
+    type: "friend",
     messages: [
       {
         id: "msg-16",

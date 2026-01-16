@@ -135,9 +135,6 @@ function SwipeCard({ profile, stackPosition, onSwipe, cardRef }: SwipeCardProps)
       : `0 ${15 - stackPosition * 5}px ${30 - stackPosition * 10}px -12px rgba(0, 0, 0, ${0.4 - stackPosition * 0.1})`,
   };
 
-  // Random smoke compatibility for demo
-  const compatibility = 65 + Math.floor(profile.id.charCodeAt(0) % 30);
-
   return (
     <div
       ref={ref}
@@ -165,8 +162,8 @@ function SwipeCard({ profile, stackPosition, onSwipe, cardRef }: SwipeCardProps)
         <div className="flex gap-2">
           {profile.verified && (
             <span
-              className="px-2.5 py-1 rounded-full text-xs font-medium flex items-center gap-1"
-              style={{ background: "rgba(212, 175, 55, 0.2)", color: "#D4AF37" }}
+              className="px-2.5 py-1 rounded-full text-xs font-medium flex items-center gap-1 backdrop-blur-md"
+              style={{ background: "rgba(0, 0, 0, 0.6)", color: "#D4AF37", border: "1px solid rgba(212, 175, 55, 0.3)" }}
             >
               <BadgeCheck className="w-3 h-3" />
               Verified
@@ -175,8 +172,8 @@ function SwipeCard({ profile, stackPosition, onSwipe, cardRef }: SwipeCardProps)
         </div>
         {profile.online && (
           <span
-            className="px-2.5 py-1 rounded-full text-xs font-medium flex items-center gap-1"
-            style={{ background: "rgba(34, 197, 94, 0.2)", color: "#4ade80" }}
+            className="px-2.5 py-1 rounded-full text-xs font-medium flex items-center gap-1 backdrop-blur-md"
+            style={{ background: "rgba(0, 0, 0, 0.6)", color: "#4ade80", border: "1px solid rgba(34, 197, 94, 0.3)" }}
           >
             <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
             Online
@@ -186,34 +183,6 @@ function SwipeCard({ profile, stackPosition, onSwipe, cardRef }: SwipeCardProps)
 
       {/* Content */}
       <div className="absolute bottom-0 left-0 right-0 p-5 z-10">
-        {/* Smoke Compatibility */}
-        <div
-          className="mb-4 p-3 rounded-xl flex items-center gap-3"
-          style={{ background: "rgba(233, 30, 99, 0.15)", border: "1px solid rgba(233, 30, 99, 0.2)" }}
-        >
-          <div
-            className="w-10 h-10 rounded-full flex items-center justify-center"
-            style={{ background: "rgba(233, 30, 99, 0.2)" }}
-          >
-            <Flame className="w-5 h-5 text-pink-400" />
-          </div>
-          <div className="flex-1">
-            <div className="text-xs text-white/50 mb-1">Smoke Compatibility</div>
-            <div className="flex items-center gap-2">
-              <div className="flex-1 h-1.5 rounded-full bg-white/10 overflow-hidden">
-                <div
-                  className="h-full rounded-full"
-                  style={{
-                    width: `${compatibility}%`,
-                    background: "linear-gradient(90deg, #ec4899, #f472b6)"
-                  }}
-                />
-              </div>
-              <span className="text-pink-400 text-sm font-medium">{compatibility}%</span>
-            </div>
-          </div>
-        </div>
-
         <div className="flex items-baseline gap-2 mb-1">
           <h3 className="font-display text-2xl font-medium text-white">{profile.name}</h3>
           <span className="text-lg text-white/50 font-light">{profile.age}</span>
@@ -361,10 +330,10 @@ export function MatchContent() {
   const isOutOfProfiles = currentIndex >= mockProfiles.length;
 
   return (
-    <div ref={pageRef} className="opacity-0 flex flex-col h-full">
+    <div ref={pageRef} className="opacity-0 flex flex-col min-h-screen pb-20">
       {/* Header */}
       <header
-        className="px-4 pt-4 pb-3 safe-top flex items-center justify-between"
+        className="px-4 pt-14 pb-3 flex items-center justify-between"
         style={{
           background: "rgba(10, 10, 10, 0.95)",
           backdropFilter: "blur(20px)",
@@ -384,11 +353,19 @@ export function MatchContent() {
           </h1>
           <p className="text-white/40 text-xs">Find your smoke partner for life</p>
         </div>
-        <div className="w-10" /> {/* Spacer for centering */}
+        <Link href="/discover" className="w-10 h-10 flex items-center justify-center">
+          <Image
+            src="/logo.png"
+            alt="StonelyFans"
+            width={32}
+            height={32}
+            className="object-contain opacity-60 hover:opacity-100 transition-opacity"
+          />
+        </Link>
       </header>
 
       {/* Card Stack */}
-      <div className="flex-1 relative flex items-center justify-center px-4 pt-2">
+      <div className="flex-1 relative flex items-center justify-center px-4">
         {isOutOfProfiles ? (
           <div className="text-center px-8">
             <div
@@ -424,6 +401,40 @@ export function MatchContent() {
           ))
         )}
       </div>
+
+      {/* Smoke Compatibility - Below Card */}
+      {!isOutOfProfiles && remainingProfiles[0] && (
+        <div className="px-4 mb-2">
+          <div
+            className="max-w-[340px] mx-auto p-3 rounded-xl flex items-center gap-3"
+            style={{ background: "rgba(233, 30, 99, 0.15)", border: "1px solid rgba(233, 30, 99, 0.2)" }}
+          >
+            <div
+              className="w-10 h-10 rounded-full flex items-center justify-center"
+              style={{ background: "rgba(233, 30, 99, 0.2)" }}
+            >
+              <Flame className="w-5 h-5 text-pink-400" />
+            </div>
+            <div className="flex-1">
+              <div className="text-xs text-white/50 mb-1">Smoke Compatibility</div>
+              <div className="flex items-center gap-2">
+                <div className="flex-1 h-1.5 rounded-full bg-white/10 overflow-hidden">
+                  <div
+                    className="h-full rounded-full"
+                    style={{
+                      width: `${65 + Math.floor(remainingProfiles[0].id.charCodeAt(0) % 30)}%`,
+                      background: "linear-gradient(90deg, #ec4899, #f472b6)"
+                    }}
+                  />
+                </div>
+                <span className="text-pink-400 text-sm font-medium">
+                  {65 + Math.floor(remainingProfiles[0].id.charCodeAt(0) % 30)}%
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Action Bar */}
       {!isOutOfProfiles && (

@@ -3,11 +3,78 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  MessageCircle,
+  Video,
+  Leaf,
+  Users,
+  Heart,
+  BadgeCheck,
+} from "lucide-react";
 import anime from "animejs";
-import { mockConversations, formatMessageTime, type Conversation } from "~/lib/mock-data";
+import {
+  mockConversations,
+  formatMessageTime,
+  type Conversation,
+  type ConversationType,
+} from "~/lib/mock-data";
 import { cn } from "~/lib/utils";
 import { Link } from "~/i18n/routing";
+
+// Tab config
+const tabConfig: Record<
+  "all" | ConversationType,
+  { label: string; icon: React.ElementType; color: string }
+> = {
+  all: { label: "All", icon: MessageCircle, color: "#4ade80" },
+  match: { label: "Matches", icon: Heart, color: "#f472b6" },
+  vibe: { label: "Vibes", icon: Video, color: "#c084fc" },
+  sesh: { label: "Sesh", icon: Leaf, color: "#4ade80" },
+  friend: { label: "Friends", icon: Users, color: "#60a5fa" },
+};
+
+// Filter Tab Component
+function FilterTab({
+  type,
+  active,
+  count,
+  onClick,
+}: {
+  type: "all" | ConversationType;
+  active: boolean;
+  count: number;
+  onClick: () => void;
+}) {
+  const config = tabConfig[type];
+  const Icon = config.icon;
+
+  return (
+    <button
+      onClick={onClick}
+      className="flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap transition-all"
+      style={{
+        background: active ? `${config.color}20` : "rgba(255, 255, 255, 0.05)",
+        color: active ? config.color : "rgba(255, 255, 255, 0.5)",
+        border: `1px solid ${active ? config.color : "rgba(255, 255, 255, 0.1)"}`,
+      }}
+    >
+      <Icon className="w-4 h-4" />
+      <span className="text-sm font-medium">{config.label}</span>
+      {count > 0 && (
+        <span
+          className="px-1.5 py-0.5 rounded-full text-xs"
+          style={{
+            background: active ? `${config.color}30` : "rgba(255, 255, 255, 0.1)",
+          }}
+        >
+          {count}
+        </span>
+      )}
+    </button>
+  );
+}
 
 // Conversation Card Component
 function ConversationCard({
@@ -18,14 +85,16 @@ function ConversationCard({
   isActive: boolean;
 }) {
   const t = useTranslations("chat");
+  const typeConfig = tabConfig[conversation.type];
 
   return (
     <Link
       href={`/chat/${conversation.id}`}
       className={cn(
-        "flex flex-col h-full bg-lounge-smoke rounded-3xl overflow-hidden transition-all duration-300",
+        "flex flex-col h-full rounded-3xl overflow-hidden transition-all duration-300",
         isActive ? "scale-100 opacity-100" : "scale-95 opacity-60"
       )}
+      style={{ background: "rgba(255, 255, 255, 0.05)" }}
     >
       {/* Profile Image */}
       <div className="relative h-48 flex-shrink-0">
@@ -36,12 +105,32 @@ function ConversationCard({
           className="object-cover"
           sizes="300px"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-lounge-smoke via-transparent to-transparent" />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(to top, rgba(10, 10, 10, 1) 0%, transparent 60%)",
+          }}
+        />
+
+        {/* Type badge */}
+        <div
+          className="absolute top-4 left-4 px-3 py-1 rounded-full flex items-center gap-1.5"
+          style={{ background: `${typeConfig.color}20`, color: typeConfig.color }}
+        >
+          <typeConfig.icon className="w-3.5 h-3.5" />
+          <span className="text-xs font-medium">{typeConfig.label}</span>
+        </div>
 
         {/* Online indicator */}
         {conversation.profile.online && (
           <div className="absolute top-4 right-4">
-            <span className="badge-online text-xs">{t("online")}</span>
+            <span
+              className="px-2.5 py-1 rounded-full text-xs font-medium"
+              style={{ background: "rgba(34, 197, 94, 0.2)", color: "#4ade80" }}
+            >
+              {t("online")}
+            </span>
           </div>
         )}
       </div>
@@ -49,22 +138,30 @@ function ConversationCard({
       {/* Content */}
       <div className="flex-1 p-4 flex flex-col">
         <div className="flex items-center justify-between mb-2">
-          <h3 className="font-display text-xl font-medium text-text-primary">
-            {conversation.profile.name}
-          </h3>
-          <span className="text-text-muted text-xs">
+          <div className="flex items-center gap-1.5">
+            <h3 className="font-display text-xl font-medium text-white">
+              {conversation.profile.name}
+            </h3>
+            {conversation.profile.verified && (
+              <BadgeCheck className="w-5 h-5" style={{ color: "#D4AF37" }} />
+            )}
+          </div>
+          <span className="text-white/40 text-xs">
             {formatMessageTime(conversation.lastMessageTime)}
           </span>
         </div>
 
-        <p className="text-text-secondary text-sm line-clamp-2 flex-1">
+        <p className="text-white/50 text-sm line-clamp-2 flex-1">
           {conversation.lastMessage}
         </p>
 
         {/* Unread badge */}
         {conversation.unread > 0 && (
           <div className="mt-3 flex items-center gap-2">
-            <span className="px-2 py-1 bg-rose rounded-full text-white text-xs font-medium">
+            <span
+              className="px-2.5 py-1 rounded-full text-white text-xs font-medium"
+              style={{ background: "var(--color-accent-1)" }}
+            >
               {conversation.unread} new
             </span>
           </div>
@@ -78,6 +175,7 @@ function ConversationCard({
 export function ChatListContent() {
   const t = useTranslations("chat");
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [activeFilter, setActiveFilter] = useState<"all" | ConversationType>("all");
   const containerRef = useRef<HTMLDivElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
   const [dragStart, setDragStart] = useState(0);
@@ -97,9 +195,26 @@ export function ChatListContent() {
     }
   }, []);
 
-  const conversations = mockConversations;
+  // Filter conversations
+  const conversations =
+    activeFilter === "all"
+      ? mockConversations
+      : mockConversations.filter((c) => c.type === activeFilter);
+
+  // Count by type
+  const countByType = (type: ConversationType) =>
+    mockConversations.filter((c) => c.type === type).length;
+
   const cardWidth = 280;
   const gap = 16;
+
+  // Reset index when filter changes
+  useEffect(() => {
+    setCurrentIndex(0);
+    if (containerRef.current) {
+      containerRef.current.style.transform = "translateX(0)";
+    }
+  }, [activeFilter]);
 
   const animateToIndex = useCallback(
     (index: number) => {
@@ -183,84 +298,159 @@ export function ChatListContent() {
     }
   };
 
+  // Calculate total unread
+  const totalUnread = mockConversations.reduce((sum, c) => sum + c.unread, 0);
+
   return (
     <div ref={pageRef} className="opacity-0 flex flex-col h-full">
       {/* Header */}
-      <header className="px-4 pt-4 pb-2 safe-top">
-        <h1 className="font-display text-2xl font-medium text-text-primary text-center">
-          {t("title")}
-        </h1>
+      <header
+        className="px-4 pt-4 pb-4 safe-top"
+        style={{
+          background: "rgba(10, 10, 10, 0.95)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+        }}
+      >
+        <div className="flex items-center justify-between mb-4">
+          <h1 className="font-display text-2xl text-white flex items-center gap-2">
+            <MessageCircle className="w-6 h-6 text-green-400" />
+            {t("title")}
+          </h1>
+          {totalUnread > 0 && (
+            <span
+              className="px-3 py-1 rounded-full text-sm font-medium"
+              style={{ background: "var(--color-accent-1)" }}
+            >
+              {totalUnread} unread
+            </span>
+          )}
+        </div>
+
+        {/* Filter tabs */}
+        <div className="flex gap-2 overflow-x-auto scrollbar-hide -mx-4 px-4 pb-1">
+          <FilterTab
+            type="all"
+            active={activeFilter === "all"}
+            count={mockConversations.length}
+            onClick={() => setActiveFilter("all")}
+          />
+          <FilterTab
+            type="match"
+            active={activeFilter === "match"}
+            count={countByType("match")}
+            onClick={() => setActiveFilter("match")}
+          />
+          <FilterTab
+            type="vibe"
+            active={activeFilter === "vibe"}
+            count={countByType("vibe")}
+            onClick={() => setActiveFilter("vibe")}
+          />
+          <FilterTab
+            type="sesh"
+            active={activeFilter === "sesh"}
+            count={countByType("sesh")}
+            onClick={() => setActiveFilter("sesh")}
+          />
+          <FilterTab
+            type="friend"
+            active={activeFilter === "friend"}
+            count={countByType("friend")}
+            onClick={() => setActiveFilter("friend")}
+          />
+        </div>
       </header>
 
       {/* Dot indicators */}
-      <div className="flex justify-center gap-2 py-4">
-        {conversations.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => animateToIndex(index)}
-            className={cn(
-              "w-2 h-2 rounded-full transition-all duration-300",
-              index === currentIndex ? "bg-gold w-6" : "bg-text-muted/30"
-            )}
-          />
-        ))}
-      </div>
+      {conversations.length > 0 && (
+        <div className="flex justify-center gap-2 py-4">
+          {conversations.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => animateToIndex(index)}
+              className={cn(
+                "w-2 h-2 rounded-full transition-all duration-300",
+                index === currentIndex ? "bg-green-400 w-6" : "bg-white/20"
+              )}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Swipeable conversations container */}
       <div className="flex-1 relative overflow-hidden px-4">
-        {/* Navigation arrows */}
-        <button
-          onClick={goToPrev}
-          className={cn(
-            "absolute left-2 top-1/2 -translate-y-1/2 z-20 icon-btn",
-            currentIndex === 0 && "opacity-30 cursor-not-allowed"
-          )}
-          disabled={currentIndex === 0}
-        >
-          <ChevronLeft className="w-5 h-5" />
-        </button>
-        <button
-          onClick={goToNext}
-          className={cn(
-            "absolute right-2 top-1/2 -translate-y-1/2 z-20 icon-btn",
-            currentIndex === conversations.length - 1 && "opacity-30 cursor-not-allowed"
-          )}
-          disabled={currentIndex === conversations.length - 1}
-        >
-          <ChevronRight className="w-5 h-5" />
-        </button>
+        {conversations.length > 0 ? (
+          <>
+            {/* Navigation arrows */}
+            <button
+              onClick={goToPrev}
+              className={cn(
+                "absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full flex items-center justify-center transition-all",
+                currentIndex === 0 && "opacity-30 cursor-not-allowed"
+              )}
+              style={{ background: "rgba(255, 255, 255, 0.1)" }}
+              disabled={currentIndex === 0}
+            >
+              <ChevronLeft className="w-5 h-5 text-white" />
+            </button>
+            <button
+              onClick={goToNext}
+              className={cn(
+                "absolute right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full flex items-center justify-center transition-all",
+                currentIndex === conversations.length - 1 &&
+                  "opacity-30 cursor-not-allowed"
+              )}
+              style={{ background: "rgba(255, 255, 255, 0.1)" }}
+              disabled={currentIndex === conversations.length - 1}
+            >
+              <ChevronRight className="w-5 h-5 text-white" />
+            </button>
 
-        {/* Cards container */}
-        <div
-          className="flex items-center justify-center h-full"
-          onMouseDown={handleDragStart}
-          onTouchStart={handleDragStart}
-        >
-          <div
-            ref={containerRef}
-            className="flex gap-4 cursor-grab active:cursor-grabbing"
-            style={{ transform: `translateX(0)` }}
-          >
-            {conversations.map((conversation, index) => (
+            {/* Cards container */}
+            <div
+              className="flex items-center justify-center h-full"
+              onMouseDown={handleDragStart}
+              onTouchStart={handleDragStart}
+            >
               <div
-                key={conversation.id}
-                className="flex-shrink-0"
-                style={{ width: cardWidth, height: 380 }}
+                ref={containerRef}
+                className="flex gap-4 cursor-grab active:cursor-grabbing"
+                style={{ transform: "translateX(0)" }}
               >
-                <ConversationCard
-                  conversation={conversation}
-                  isActive={index === currentIndex}
-                />
+                {conversations.map((conversation, index) => (
+                  <div
+                    key={conversation.id}
+                    className="flex-shrink-0"
+                    style={{ width: cardWidth, height: 380 }}
+                  >
+                    <ConversationCard
+                      conversation={conversation}
+                      isActive={index === currentIndex}
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
+          </>
+        ) : (
+          /* Empty state */
+          <div className="flex flex-col items-center justify-center h-full">
+            <MessageCircle className="w-16 h-16 text-white/20 mb-4" />
+            <h3 className="text-white/60 font-medium mb-2">No conversations</h3>
+            <p className="text-white/40 text-sm text-center">
+              Start matching, vibing, or joining seshes to start chatting!
+            </p>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Swipe hint */}
-      <div className="text-center py-4">
-        <p className="text-text-muted text-sm">Swipe to switch conversations</p>
-      </div>
+      {conversations.length > 1 && (
+        <div className="text-center py-4">
+          <p className="text-white/40 text-sm">Swipe to switch conversations</p>
+        </div>
+      )}
     </div>
   );
 }
