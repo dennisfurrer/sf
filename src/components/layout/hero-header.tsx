@@ -468,10 +468,10 @@ export function HeroHeader({ onlineCount = 4269 }: HeroHeaderProps) {
               className="relative z-10"
               style={{
                 width: "auto",
-                height: "clamp(228px, 36vw, 330px)",
+                height: "clamp(251px, 40vw, 363px)",
                 maxWidth: "95vw",
-                marginTop: "-20px",
-                marginBottom: "-20px",
+                marginTop: "-22px",
+                marginBottom: "-22px",
                 filter: "drop-shadow(0 0 40px var(--glow-secondary))",
               }}
               priority

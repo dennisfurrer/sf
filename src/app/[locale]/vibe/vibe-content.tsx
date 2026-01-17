@@ -48,7 +48,7 @@ function PreferenceOption({
   return (
     <button
       onClick={onClick}
-      className="flex flex-col items-center gap-2 p-4 rounded-2xl transition-all duration-300"
+      className="flex flex-col items-center gap-1.5 p-2.5 rounded-xl transition-all duration-300"
       style={{
         background: selected ? `${color}20` : "rgba(255, 255, 255, 0.05)",
         border: `1px solid ${selected ? color : "rgba(255, 255, 255, 0.08)"}`,
@@ -56,18 +56,18 @@ function PreferenceOption({
       }}
     >
       <div
-        className="w-12 h-12 rounded-full flex items-center justify-center transition-all"
+        className="w-10 h-10 rounded-full flex items-center justify-center transition-all"
         style={{
           background: selected ? `${color}30` : "rgba(255, 255, 255, 0.08)",
         }}
       >
         <Icon
-          className="w-6 h-6 transition-colors"
+          className="w-5 h-5 transition-colors"
           style={{ color: selected ? color : "rgba(255, 255, 255, 0.5)" }}
         />
       </div>
       <span
-        className="text-sm font-medium transition-colors"
+        className="text-xs font-medium transition-colors"
         style={{ color: selected ? color : "rgba(255, 255, 255, 0.6)" }}
       >
         {label}
@@ -85,11 +85,11 @@ function PreferenceSection({
   children: React.ReactNode;
 }) {
   return (
-    <div className="space-y-3">
-      <h3 className="text-white/50 text-sm font-medium uppercase tracking-wider">
+    <div className="space-y-2">
+      <h3 className="text-white/50 text-xs font-medium uppercase tracking-wider">
         {title}
       </h3>
-      <div className="grid grid-cols-3 gap-3">{children}</div>
+      <div className="grid grid-cols-3 gap-2">{children}</div>
     </div>
   );
 }
@@ -157,10 +157,10 @@ function PreMatchScreen({
   }, []);
 
   return (
-    <div className="min-h-screen pb-24 flex flex-col">
+    <div className="min-h-screen pb-20 flex flex-col">
       {/* Header Area with Gradient */}
       <div
-        className="relative pt-12 pb-8 px-4"
+        className="relative pt-10 pb-4 px-4"
         style={{
           background:
             "linear-gradient(180deg, rgba(156, 39, 176, 0.15) 0%, transparent 100%)",
@@ -177,29 +177,29 @@ function PreMatchScreen({
           />
         </div>
 
-        <div className="relative flex justify-center mb-6">
+        <div className="relative flex justify-center mb-3">
           <div
-            className="vibe-icon w-24 h-24 rounded-full flex items-center justify-center"
+            className="vibe-icon w-16 h-16 rounded-full flex items-center justify-center"
             style={{
               background:
                 "linear-gradient(135deg, rgba(156, 39, 176, 0.3) 0%, rgba(233, 30, 99, 0.2) 100%)",
               boxShadow: "0 8px 40px rgba(156, 39, 176, 0.3)",
             }}
           >
-            <Video className="w-12 h-12 text-purple-400" />
+            <Video className="w-8 h-8 text-purple-400" />
           </div>
         </div>
 
         <div className="text-center">
-          <h1 className="font-display text-3xl text-white mb-2">
+          <h1 className="font-display text-2xl text-white mb-1">
             {t("title")}
           </h1>
-          <p className="text-white/50">{t("subtitle")}</p>
+          <p className="text-white/50 text-sm">{t("subtitle")}</p>
         </div>
       </div>
 
       {/* Preferences */}
-      <div ref={contentRef} className="flex-1 px-4 pt-6 space-y-8">
+      <div ref={contentRef} className="flex-1 px-4 pt-4 space-y-5">
         <div className="opacity-0">
           <PreferenceSection title={t("preferences.smoking")}>
             <PreferenceOption
@@ -280,25 +280,25 @@ function PreMatchScreen({
       </div>
 
       {/* Start Button */}
-      <div className="px-4 pt-6 pb-2">
+      <div className="px-4 pt-4 pb-1">
         <button
           ref={buttonRef}
           onClick={onStart}
-          className="w-full py-5 rounded-2xl font-display text-xl text-white font-medium flex items-center justify-center gap-3 transition-transform active:scale-[0.98]"
+          className="w-full py-4 rounded-2xl font-display text-lg text-white font-medium flex items-center justify-center gap-2 transition-transform active:scale-[0.98]"
           style={{
             background:
               "linear-gradient(135deg, #9c27b0 0%, #e91e63 50%, #9c27b0 100%)",
             backgroundSize: "200% 200%",
           }}
         >
-          <Zap className="w-6 h-6" />
+          <Zap className="w-5 h-5" />
           {t("startMatching")}
         </button>
       </div>
 
-      <div className="text-center pb-4">
-        <span className="text-white/30 text-sm">
-          <span className="inline-block w-2 h-2 rounded-full bg-green-500 mr-2 animate-pulse" />
+      <div className="text-center pb-2">
+        <span className="text-white/30 text-xs">
+          <span className="inline-block w-1.5 h-1.5 rounded-full bg-green-500 mr-1.5 animate-pulse" />
           847 vibing now
         </span>
       </div>

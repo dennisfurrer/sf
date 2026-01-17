@@ -128,10 +128,11 @@ function SwipeCard({ profile, stackPosition, onSwipe, cardRef }: SwipeCardProps)
     };
   }, [isDragging, handleDragMove, handleDragEnd]);
 
-  // Stack styling
+  // Stack styling - will-change for GPU acceleration
   const stackStyles: React.CSSProperties = {
     zIndex: 10 - stackPosition,
     opacity: stackPosition > 2 ? 0 : 1 - stackPosition * 0.3,
+    willChange: "transform",
   };
 
   if (stackPosition !== 0) return null; // Only show top card
